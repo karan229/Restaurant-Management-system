@@ -15,8 +15,6 @@ mongoose.connection.on("connected", function () {
     console.log("My App is connected to Database!!");
   })
 
-
-
 // port set to 8000
 const port = process.env.PORT;
 
