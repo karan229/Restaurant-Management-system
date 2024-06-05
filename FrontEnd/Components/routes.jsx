@@ -1,16 +1,52 @@
-import React from "react";
-import { Routes, Route, BrowserRouter, Link } from "react-router-dom";
+import React, { useState } from "react";
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import styled from 'styled-components';
 import Home from './src/Home.jsx';
-const NotFound = () => <h1>404! Page Not Found</h1>;  // display this when user navigate to other routes
+import Login from "./src/Login.jsx";
+import NavBar from "./src/Navbar.jsx";
+import Admin from "./src/Admin.jsx";
+import Stock from "./src/Stock.jsx";
 
-export default function Navbar() {
+
+const NotFound = () => <h1>404! Page Not Found</h1>;
+
+const ContentContainer = styled.div`
+  margin-left: 200px;
+  padding: 20px;
+
+  @media (max-width: 768px) {
+    margin: 0;
+    margin-top: 50px;
+    display: block;
+    font-size: 14px;
+  }
+`;
+
+export default function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const handleLogin = () => {
+    setIsLoggedIn(true);
+  };
+
   return (
-    // BrowserRouter and Routes to set up the routing for different pages
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </BrowserRouter>
+    <Router>
+     
+        <>
+          <NavBar />
+          <ContentContainer>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/Profile" element={<Admin />} />
+              <Route path="/Stock" element={<Stock />} />
+              <Route path="/login" element={<Navigate to="/" />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </ContentContainer>
+        </>
+      
+       
+    
+    </Router>
   );
 }
