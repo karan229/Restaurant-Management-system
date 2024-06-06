@@ -17,48 +17,6 @@ const Select = styled.select`
   border-radius: 5px;
 `;
 
-const Login = ({ onLogin }) => {
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [userType, setUserType] = useState('');
-  const [message, setMessage] = useState('');
-  const [error, setError] = useState(false);
-
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post('http://localhost:8000/login', {
-        email,
-        password,
-      });
-      setMessage(response.data.message);
-      setError(false);
-      onLogin(response.data.userType);
-    } catch (err) {
-      setMessage(err.response?.data?.message || 'An error occurred');
-      setError(true);
-    }
-  };
-
-  const handleRegister = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await axios.post('http://localhost:8000/register', {
-        username,
-        email,
-        password,
-        userType,
-      });
-      setMessage(response.data.message);
-      setError(false);
-      onLogin();
-    } catch (err) {
-      setMessage(err.response?.data?.message || 'An error occurred');
-      setError(true);
-    }
-  };
-
   return (
     <div className="container" id="container">
       <div className="form-container sign-up-container">
