@@ -31,7 +31,7 @@ export default function App() {
 
   return (
     <Router>
-     
+      {isLoggedIn ? (
         <>
           <NavBar />
           <ContentContainer>
@@ -44,9 +44,14 @@ export default function App() {
             </Routes>
           </ContentContainer>
         </>
-      
-       
-    
+      ) : (
+        <Routes>
+          <Route path="/login" element={<Login onLogin={handleLogin} />} />
+          <Route path="*" element={<Navigate to="/login" />} />
+        </Routes>
+      )}
+
+
     </Router>
   );
 }
