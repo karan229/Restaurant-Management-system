@@ -463,25 +463,25 @@ function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(
 
 
 
-var NavBarContainer = styled_components__WEBPACK_IMPORTED_MODULE_1__["default"].div(_templateObject || (_templateObject = _taggedTemplateLiteral(["\n  width: 200px;\n  height: 100vh;\n  color: white;\n  \n  background-color: #4158D0;\n  background-image: linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%);\n  \n  \n\n  border-radius: 10px;\n\n  box-shadow:  20px 20px 60px #90abd9,\n  -20px -20px 60px #c2e7ff;\n\n  padding: 20px;\n  position: fixed;\n  left: 0;\n  top: 0;\n  transform: ", ";\n  transition: transform 0.3s ease;\n  z-index: 1;\n\n  @media (min-width: 769px) {\n    transform: none;\n  }\n"])), function (props) {
-  return props.isOpen ? 'translateX(0)' : 'translateX(-100%)';
+var NavBarContainer = styled_components__WEBPACK_IMPORTED_MODULE_1__["default"].div(_templateObject || (_templateObject = _taggedTemplateLiteral(["\n  width: 200px;\n  height: 100vh;\n  color: white;\n  background-color: #4158D0;\n  background-image: linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%);\n  border-radius: 10px;\n  box-shadow: 20px 20px 60px #90abd9, -20px -20px 60px #c2e7ff;\n  padding: 20px;\n  position: fixed;\n  left: 0;\n  top: 0;\n  transform: ", ";\n  transition: transform 0.3s ease;\n  z-index: 1;\n\n  @media (min-width: 769px) {\n    transform: translateX(0); /* Ensure it's visible on larger screens */\n  }\n"])), function (props) {
+  return props.$isopen ? 'translateX(0)' : 'translateX(-100%)';
 });
-var NavLink = (0,styled_components__WEBPACK_IMPORTED_MODULE_1__["default"])(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Link)(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(["\n  margin: 50px 0;\n  display: block;\n  padding: 10px 20px;\n  font-size: 16px;\n  font-weight: bold;\n  color: white;\n  text-decoration: none;\n  backdrop-filter: blur(16px) saturate(180%);\n    -webkit-backdrop-filter: blur(16px) saturate(180%);\n    background-color: rgba(17, 25, 40, 0.75);\n    border-radius: 12px;\n    border: 1px solid rgba(255, 255, 255, 0.125);\n  border: none;\n  border-radius: 5px;\n  cursor: pointer;\n  transition: transform 0.3s ease;\n\n  &:hover {\n    transform: scale(1.1);\n    color: white; \n  }\n\n  @media (max-width: 768px) {\n    margin: 20px 0;\n    font-size: 14px;\n    width: auto;\n  }\n"])));
+var NavLink = (0,styled_components__WEBPACK_IMPORTED_MODULE_1__["default"])(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Link)(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(["\n  margin: 50px 0;\n  display: block;\n  padding: 10px 20px;\n  font-size: 16px;\n  font-weight: bold;\n  color: white;\n  text-decoration: none;\n  backdrop-filter: blur(16px) saturate(180%);\n  -webkit-backdrop-filter: blur(16px) saturate(180%);\n  background-color: rgba(17, 25, 40, 0.75);\n  border: none;\n  border-radius: 5px;\n  cursor: pointer;\n  transition: transform 0.3s ease;\n\n  &:hover {\n    transform: scale(1.1);\n    color: white;\n  }\n\n  @media (max-width: 768px) {\n    margin: 20px 0;\n    font-size: 14px;\n    width: auto;\n  }\n"])));
 var ToggleButton = styled_components__WEBPACK_IMPORTED_MODULE_1__["default"].a(_templateObject3 || (_templateObject3 = _taggedTemplateLiteral(["\n  display: none;\n  position: fixed;\n  top: 20px;\n  left: 20px;\n  background-color: transparent;\n  border: none;\n  font-size: 24px;\n  color: black;\n  cursor: pointer;\n  z-index: 2;\n\n  @media (max-width: 768px) {\n    display: block;\n  }\n"])));
 var NavBar = function NavBar() {
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState2 = _slicedToArray(_useState, 2),
-    isOpen = _useState2[0],
-    setIsOpen = _useState2[1];
+    isopen = _useState2[0],
+    setisopen = _useState2[1];
   var handleToggle = function handleToggle() {
-    setIsOpen(!isOpen);
+    setisopen(!isopen);
   };
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(ToggleButton, {
     onClick: handleToggle
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("i", {
-    className: "fas ".concat(isOpen ? 'fa-times' : 'fa-bars')
+    className: "fas ".concat(isopen ? 'fa-times' : 'fa-bars')
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(NavBarContainer, {
-    isOpen: isOpen
+    $isopen: isopen
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", {
     style: {
       marginTop: '50px'
