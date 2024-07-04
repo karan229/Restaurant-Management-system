@@ -5,6 +5,10 @@ const mongoose = require('mongoose');
 const path = require('path');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
+
+
+console.log('MongoDB Connection String:', process.env.STRING);
+
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
 
@@ -14,6 +18,7 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 app.use(express.json());
+
 
 
 const dbConnectionString = process.env.STRING;
@@ -44,6 +49,8 @@ const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   userType: { type: String, required: true },
+  joiningDate: { type: Date, default: Date.now },
+  status: { type: String, default: 'active' },
 });
 
 const User = mongoose.model('User', userSchema);
@@ -92,8 +99,6 @@ app.post('/register', async (req, res) => {
   }
 });
 
-
-
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
@@ -107,6 +112,7 @@ app.post('/login', async (req, res) => {
     if (!isPasswordValid) {
       return res.status(400).json({ message: 'Invalid password' });
     }
+    res.status(200).json({ message: 'Login successful', userType: user.userType, email: user.email });
 
     const token = jwt.sign({ userId: user._id, userType: user.userType }, JWT_SECRET, { expiresIn: TOKEN_EXPIRATION });
     res.status(200).json({ message: 'Login successful', token, userType: user.userType });
@@ -243,6 +249,28 @@ app.delete('/api/items/:id', async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Server error' });
+  }
+});
+
+
+app.get('/admin-details', async (req, res) => {
+  const adminEmail = req.query.email; // Get email from query params
+
+  if (!adminEmail) {
+    return res.status(400).json({ message: 'Admin email is required' });
+  }
+
+  try {
+    const adminUser = await User.findOne({ email: adminEmail, userType: 'admin' });
+
+    if (!adminUser) {
+      return res.status(404).json({ message: 'Admin details not found' });
+    }
+
+    const { username, email, joiningDate, status, profilePicture } = adminUser;
+    res.status(200).json({ username, email, joiningDate, status, profilePicture });
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching admin details', error });
   }
 });
 

@@ -74,6 +74,9 @@ const ToggleButton = styled.button`
 `;
 
 
+const NavBar = ({ onLogout }) => {
+  const [isopen, setisopen] = useState(false);
+
 const LogoutButton = styled.div`
 margin: 50px 0;
 display: block;
@@ -127,6 +130,9 @@ const NavBar = ({ onLogout }) => {
         <NavLink to="/" onClick={handleToggle}>Home</NavLink>
         <NavLink to="/Stock" onClick={handleToggle}>Stock</NavLink>
         <NavLink to="/Profile" onClick={handleToggle}>Admin</NavLink>
+
+        <NavLink onClick={onLogout}>Logout</NavLink>
+
         <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
       </NavBarContainer>
     </>

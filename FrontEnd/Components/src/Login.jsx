@@ -32,10 +32,16 @@ const Login = ({ onLogin }) => {
         password,
       });
 
+      localStorage.setItem('userType', response.data.userType);
+      localStorage.setItem('userEmail', response.data.email);
+      localStorage.setItem('isLoggedIn', 'true');
+
+
       const userResponse = await axios.get(`http://localhost:8000/user/${email}`);
       const username = userResponse.data.username;
 
       alert(`Welcome Back ${username}`);
+
       setMessage(response.data.message);
       setError(false);
       onLogin(response.data.token);
