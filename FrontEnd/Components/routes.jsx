@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
+
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+
 import styled from 'styled-components';
 import RestoHome from './src/RestoHome.jsx';
 import Home from './src/Home.jsx';
@@ -10,7 +12,7 @@ import Admin from "./src/Admin.jsx";
 import Stock from "./src/Stock.jsx";
 import Order from './src/Order.jsx';
 
-const NotFound = () => <h1>404! Page Not Found</h1>;
+const Not_Found = () => <h1 style={{color:'black'}}>404! Page Not Found</h1>;
 
 const ContentContainer = styled.div`
   margin-left: 200px;
@@ -28,6 +30,7 @@ export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
+
     const checkLoginStatus = () => {
       const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
       const loginTime = localStorage.getItem('loginTime');
@@ -54,12 +57,39 @@ export default function App() {
     localStorage.setItem('isLoggedIn', 'true');
     const loginTime = new Date().getTime();
     localStorage.setItem('loginTime', loginTime.toString());
+
+    const token = localStorage.getItem('token');
+    if (token) {
+      fetch('http://localhost:8000/secure', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.message === 'Secure connection') {
+            setIsLoggedIn(true);
+          } else {
+            setIsLoggedIn(false);
+          }
+        })
+        .catch(() => setIsLoggedIn(false));
+    }
+  }, []);
+
+  const handleLogin = (token) => {
+    localStorage.setItem('token', token);
+
     setIsLoggedIn(true);
   };
 
   const handleLogout = () => {
+
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('loginTime');
+
+    localStorage.removeItem('token');
+
     setIsLoggedIn(false);
   };
 
@@ -68,6 +98,9 @@ export default function App() {
       {isLoggedIn ? (
         <>
           <ConditionalNavBar onLogout={handleLogout} />
+
+          <NavBar onLogout={handleLogout} />
+
           <ContentContainer>
             <Routes>
               <Route path="/" element={<RestoHome />} />
@@ -76,7 +109,7 @@ export default function App() {
               <Route path="/Order" element={<Order />} />
               <Route path="/Inventory" element={<Home />} />
               <Route path="/login" element={<Navigate to="/" />} />
-              <Route path="*" element={<NotFound />} />
+              <Route path="*" element={<Not_Found />} />
             </Routes>
           </ContentContainer>
         </>
