@@ -112,10 +112,8 @@ app.post('/login', async (req, res) => {
     if (!isPasswordValid) {
       return res.status(400).json({ message: 'Invalid password' });
     }
-    res.status(200).json({ message: 'Login successful', userType: user.userType, email: user.email });
-
     const token = jwt.sign({ userId: user._id, userType: user.userType }, JWT_SECRET, { expiresIn: TOKEN_EXPIRATION });
-    res.status(200).json({ message: 'Login successful', token, userType: user.userType });
+    res.status(200).json({ message: 'Login successful', token, userType: user.userType, email: user.email });
   } catch (error) {
     res.status(500).json({ message: 'Error logging in', error });
     console.log("Error logging in:", error);
@@ -254,7 +252,7 @@ app.delete('/api/items/:id', async (req, res) => {
 
 
 app.get('/admin-details', async (req, res) => {
-  const adminEmail = req.query.email; // Get email from query params
+  const adminEmail = req.query.email;
 
   if (!adminEmail) {
     return res.status(400).json({ message: 'Admin email is required' });

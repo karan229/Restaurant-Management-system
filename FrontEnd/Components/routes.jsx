@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
-
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
-
 import styled from 'styled-components';
 import RestoHome from './src/RestoHome.jsx';
 import Home from './src/Home.jsx';
@@ -30,67 +28,59 @@ export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-
     const checkLoginStatus = () => {
       const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
-      const loginTime = localStorage.getItem('loginTime');
-      if (loggedIn && loginTime) {
-        const thirtyMinutes = 30 * 60 * 1000;
-        const currentTime = new Date().getTime();
-        if (currentTime - parseInt(loginTime) > thirtyMinutes) {
-          handleLogout();
-        } else {
-          localStorage.setItem('loginTime', currentTime.toString());
-          setIsLoggedIn(true);
-        }
+      if (loggedIn) {
+        setIsLoggedIn(true);
+      } else {
+        setIsLoggedIn(false);
       }
     };
 
     checkLoginStatus();
 
-    return () => {
-      localStorage.removeItem('loginTime');
-    };
-  }, []);
-
-  const handleLogin = () => {
-    localStorage.setItem('isLoggedIn', 'true');
-    const loginTime = new Date().getTime();
-    localStorage.setItem('loginTime', loginTime.toString());
 
     const token = localStorage.getItem('token');
     if (token) {
-      fetch('http://localhost:8000/secure', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-        .then(response => response.json())
-        .then(data => {
-          if (data.message === 'Secure connection') {
-            setIsLoggedIn(true);
-          } else {
-            setIsLoggedIn(false);
-          }
-        })
-        .catch(() => setIsLoggedIn(false));
+      verifyToken(token);
     }
   }, []);
 
+  const verifyToken = (token) => {
+    fetch('http://localhost:8000/secure', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.message === 'Secure connection') {
+          setIsLoggedIn(true);
+        } else {
+          setIsLoggedIn(false);
+          clearAuthData(); // Clear invalid token
+        }
+      })
+      .catch(() => {
+        setIsLoggedIn(false);
+        clearAuthData(); // Clear on error
+      });
+  };
+
   const handleLogin = (token) => {
     localStorage.setItem('token', token);
-
+    localStorage.setItem('isLoggedIn', 'true');
     setIsLoggedIn(true);
   };
 
   const handleLogout = () => {
-
-    localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('loginTime');
-
-    localStorage.removeItem('token');
-
+    clearAuthData();
     setIsLoggedIn(false);
+  };
+
+  const clearAuthData = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('isLoggedIn');
   };
 
   return (
@@ -98,9 +88,6 @@ export default function App() {
       {isLoggedIn ? (
         <>
           <ConditionalNavBar onLogout={handleLogout} />
-
-          <NavBar onLogout={handleLogout} />
-
           <ContentContainer>
             <Routes>
               <Route path="/" element={<RestoHome />} />
@@ -125,8 +112,9 @@ export default function App() {
 
 const ConditionalNavBar = ({ onLogout }) => {
   const location = useLocation();
+  const showNavBar = ['/Inventory', '/Stock', '/admin', '/Profile'].includes(location.pathname);
   const showTopNavBar = location.pathname === '/';
-  const showNavBar = location.pathname === '/Profile' || location.pathname === '/Stock' || location.pathname === '/Inventory';
+
 
   return (
     <>

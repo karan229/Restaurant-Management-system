@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
-
 const NavBarContainer = styled.div`
   width: 200px;
   height: 100vh;
@@ -24,7 +23,6 @@ const NavBarContainer = styled.div`
   }
 `;
 
-
 const NavLink = styled(Link)`
   margin: 50px 0;
   display: block;
@@ -34,10 +32,10 @@ const NavLink = styled(Link)`
   color: white;
   text-decoration: none;
   backdrop-filter: blur(16px) saturate(180%);
-    -webkit-backdrop-filter: blur(16px) saturate(180%);
-    background-color: rgba(17, 25, 40, 0.75);
-    border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.125);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  background-color: rgba(17, 25, 40, 0.75);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.125);
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -45,7 +43,7 @@ const NavLink = styled(Link)`
 
   &:hover {
     transform: scale(1.1);
-    color: white; 
+    color: white;
   }
 
   @media (max-width: 768px) {
@@ -54,7 +52,6 @@ const NavLink = styled(Link)`
     width: auto;
   }
 `;
-
 
 const ToggleButton = styled.button`
   display: none;
@@ -73,40 +70,9 @@ const ToggleButton = styled.button`
   }
 `;
 
-
-const NavBar = ({ onLogout }) => {
-  const [isopen, setisopen] = useState(false);
-
-const LogoutButton = styled.div`
-margin: 50px 0;
-display: block;
-padding: 10px 20px;
-font-size: 16px;
-font-weight: bold;
-color: white;
-text-decoration: none;
-backdrop-filter: blur(16px) saturate(180%);
-  -webkit-backdrop-filter: blur(16px) saturate(180%);
-  background-color: rgba(17, 25, 40, 0.75);
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.125);
-border: none;
-border-radius: 5px;
-cursor: pointer;
-transition: transform 0.3s ease;
-
-&:hover {
-  transform: scale(1.1);
-  color: white; 
-}
-
-@media (max-width: 768px) {
-  margin: 20px 0;
-  font-size: 14px;
-  width: auto;
-}
+const LogoutButton = styled(NavLink)`
+  margin: 50px 0;
 `;
-
 
 const NavBar = ({ onLogout }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -123,16 +89,13 @@ const NavBar = ({ onLogout }) => {
   return (
     <>
       <ToggleButton onClick={handleToggle}>
-        <i className={`fas ${isOpen ? 'fa-times' : 'fa-bars'}`} style={{color:'black'}}></i>
+        <i className={`fas ${isOpen ? 'fa-times' : 'fa-bars'}`} style={{ color: 'black' }}></i>
       </ToggleButton>
       <NavBarContainer isOpen={isOpen}>
-        <h2 style={{ marginTop: '50px' }}>Dashboard</h2>
-        <NavLink to="/" onClick={handleToggle}>Home</NavLink>
+        <NavLink to="/" onClick={handleToggle}>Dashboard</NavLink>
+        <NavLink to="/Inventory" onClick={handleToggle}>Home</NavLink>
         <NavLink to="/Stock" onClick={handleToggle}>Stock</NavLink>
         <NavLink to="/Profile" onClick={handleToggle}>Admin</NavLink>
-
-        <NavLink onClick={onLogout}>Logout</NavLink>
-
         <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
       </NavBarContainer>
     </>
