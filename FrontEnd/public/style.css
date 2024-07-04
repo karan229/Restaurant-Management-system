@@ -362,3 +362,42 @@ input, select {
     padding: 10px;
   }
 }
+.admin-container {
+  color: white;
+  padding: 20px;
+  background: linear-gradient(145deg, #f07f7f, #ff4e50);
+  border-radius: 10px;
+  text-align: center;
+}
+
+.admin-title {
+  color: black;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.admin-details {
+  margin-top: 20px;
+}
+
+.admin-welcome {
+  font-size: 20px;
+  font-weight: bold;
+  color: black;
+}
+
+.admin-info {
+  font-size: 16px;
+  margin: 5px 0;
+}
+
+.admin-image {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  margin-top: 20px;
+}
+
+.admin-error {
+  color: white;
+}

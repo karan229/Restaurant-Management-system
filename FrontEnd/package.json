@@ -9,6 +9,7 @@
     "watch": "webpack -w --config Webpack.config.js",
     "start": "nodemon server.js"
   },
+  "proxy": "http://localhost:8000",
   "author": "",
   "license": "ISC",
   "dependencies": {

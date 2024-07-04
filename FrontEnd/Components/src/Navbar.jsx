@@ -68,7 +68,7 @@ const ToggleButton = styled.a`
   }
 `;
 
-const NavBar = () => {
+const NavBar = ({ onLogout }) => {
   const [isopen, setisopen] = useState(false);
 
   const handleToggle = () => {
@@ -85,6 +85,7 @@ const NavBar = () => {
         <NavLink to="/" onClick={handleToggle}>Home</NavLink>
         <NavLink to="/Stock" onClick={handleToggle}>Stock</NavLink>
         <NavLink to="/Profile" onClick={handleToggle}>Admin</NavLink>
+        <NavLink onClick={onLogout}>Logout</NavLink>
       </NavBarContainer>
     </>
   );

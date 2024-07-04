@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 
-
 const Message = styled.div`
   margin-top: 20px;
   font-size: 16px;
@@ -32,6 +31,9 @@ const Login = ({ onLogin }) => {
         email,
         password,
       });
+      localStorage.setItem('userType', response.data.userType);
+      localStorage.setItem('userEmail', response.data.email);
+      localStorage.setItem('isLoggedIn', 'true');
       setMessage(response.data.message);
       setError(false);
       onLogin(response.data.userType);
@@ -79,11 +81,6 @@ const Login = ({ onLogin }) => {
       <div className="form-container sign-in-container">
         <form onSubmit={handleLogin}>
           <h1>Sign in</h1>
-          {/* <div className="social-container">
-            <a href="#" className="social"><i className="fa-brands fa-facebook"></i></a>
-            <a href="#" className="social"><i className="fa-brands fa-instagram"></i></a>
-            <a href="#" className="social"><i className="fa-brands fa-google"></i></a>
-          </div> */}
           <input type="email" placeholder="Email" name="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
           <input type="password" placeholder="Password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
           <a href="#" style={{color: "white"}}>Forgot password? Don't worry we got you!</a>
