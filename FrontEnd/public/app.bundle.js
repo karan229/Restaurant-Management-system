@@ -61,8 +61,12 @@ function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(
 
 
 
-var NotFound = function NotFound() {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h1", null, "404! Page Not Found");
+var Not_Found = function Not_Found() {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h1", {
+    style: {
+      color: 'black'
+    }
+  }, "404! Page Not Found");
 };
 var ContentContainer = styled_components__WEBPACK_IMPORTED_MODULE_6__["default"].div(_templateObject || (_templateObject = _taggedTemplateLiteral(["\n  margin-left: 200px;\n  padding: 20px;\n\n  @media (max-width: 768px) {\n    margin: 0;\n    margin-top: 50px;\n    display: block;\n    font-size: 14px;\n  }\n"])));
 function App() {
@@ -70,10 +74,37 @@ function App() {
     _useState2 = _slicedToArray(_useState, 2),
     isLoggedIn = _useState2[0],
     setIsLoggedIn = _useState2[1];
-  var handleLogin = function handleLogin() {
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    var token = localStorage.getItem('token');
+    if (token) {
+      fetch('http://localhost:8000/secure', {
+        headers: {
+          Authorization: "Bearer ".concat(token)
+        }
+      }).then(function (response) {
+        return response.json();
+      }).then(function (data) {
+        if (data.message === 'Secure connection') {
+          setIsLoggedIn(true);
+        } else {
+          setIsLoggedIn(false);
+        }
+      }).catch(function () {
+        return setIsLoggedIn(false);
+      });
+    }
+  }, []);
+  var handleLogin = function handleLogin(token) {
+    localStorage.setItem('token', token);
     setIsLoggedIn(true);
   };
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_7__.BrowserRouter, null, isLoggedIn ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_src_Navbar_jsx__WEBPACK_IMPORTED_MODULE_3__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(ContentContainer, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_8__.Routes, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_8__.Route, {
+  var handleLogout = function handleLogout() {
+    localStorage.removeItem('token');
+    setIsLoggedIn(false);
+  };
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_7__.BrowserRouter, null, isLoggedIn ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_src_Navbar_jsx__WEBPACK_IMPORTED_MODULE_3__["default"], {
+    onLogout: handleLogout
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(ContentContainer, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_8__.Routes, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_8__.Route, {
     path: "/",
     element: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_src_Home_jsx__WEBPACK_IMPORTED_MODULE_1__["default"], null)
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_8__.Route, {
@@ -89,7 +120,7 @@ function App() {
     })
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_8__.Route, {
     path: "*",
-    element: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(NotFound, null)
+    element: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(Not_Found, null)
   })))) : /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_8__.Routes, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_8__.Route, {
     path: "/login",
     element: /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_src_Login_jsx__WEBPACK_IMPORTED_MODULE_2__["default"], {
@@ -260,7 +291,7 @@ var Login = function Login(_ref) {
     setError = _useState12[1];
   var handleLogin = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(e) {
-      var response, _err$response;
+      var response, userResponse, _username, _err$response;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
@@ -273,21 +304,27 @@ var Login = function Login(_ref) {
             });
           case 4:
             response = _context.sent;
+            _context.next = 7;
+            return axios__WEBPACK_IMPORTED_MODULE_2__["default"].get("http://localhost:8000/user/".concat(email));
+          case 7:
+            userResponse = _context.sent;
+            _username = userResponse.data.username;
+            alert("Welcome Back ".concat(_username));
             setMessage(response.data.message);
             setError(false);
-            onLogin(response.data.userType);
-            _context.next = 14;
+            onLogin(response.data.token);
+            _context.next = 19;
             break;
-          case 10:
-            _context.prev = 10;
+          case 15:
+            _context.prev = 15;
             _context.t0 = _context["catch"](1);
             setMessage(((_err$response = _context.t0.response) === null || _err$response === void 0 || (_err$response = _err$response.data) === null || _err$response === void 0 ? void 0 : _err$response.message) || 'An error occurred');
             setError(true);
-          case 14:
+          case 19:
           case "end":
             return _context.stop();
         }
-      }, _callee, null, [[1, 10]]);
+      }, _callee, null, [[1, 15]]);
     }));
     return function handleLogin(_x) {
       return _ref2.apply(this, arguments);
@@ -310,21 +347,22 @@ var Login = function Login(_ref) {
             });
           case 4:
             response = _context2.sent;
+            alert("Welcome ".concat(username));
             setMessage(response.data.message);
+            onLogin(response.data.token);
             setError(false);
-            onLogin();
-            _context2.next = 14;
+            _context2.next = 15;
             break;
-          case 10:
-            _context2.prev = 10;
+          case 11:
+            _context2.prev = 11;
             _context2.t0 = _context2["catch"](1);
             setMessage(((_err$response2 = _context2.t0.response) === null || _err$response2 === void 0 || (_err$response2 = _err$response2.data) === null || _err$response2 === void 0 ? void 0 : _err$response2.message) || 'An error occurred');
             setError(true);
-          case 14:
+          case 15:
           case "end":
             return _context2.stop();
         }
-      }, _callee2, null, [[1, 10]]);
+      }, _callee2, null, [[1, 11]]);
     }));
     return function handleRegister(_x2) {
       return _ref3.apply(this, arguments);
@@ -452,7 +490,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/dist/index.js");
 /* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.browser.esm.js");
-var _templateObject, _templateObject2, _templateObject3;
+var _templateObject, _templateObject2, _templateObject3, _templateObject4;
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
@@ -463,25 +501,34 @@ function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(
 
 
 
-var NavBarContainer = styled_components__WEBPACK_IMPORTED_MODULE_1__["default"].div(_templateObject || (_templateObject = _taggedTemplateLiteral(["\n  width: 200px;\n  height: 100vh;\n  color: white;\n  background-color: #4158D0;\n  background-image: linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%);\n  border-radius: 10px;\n  box-shadow: 20px 20px 60px #90abd9, -20px -20px 60px #c2e7ff;\n  padding: 20px;\n  position: fixed;\n  left: 0;\n  top: 0;\n  transform: ", ";\n  transition: transform 0.3s ease;\n  z-index: 1;\n\n  @media (min-width: 769px) {\n    transform: translateX(0); /* Ensure it's visible on larger screens */\n  }\n"])), function (props) {
-  return props.$isopen ? 'translateX(0)' : 'translateX(-100%)';
+var NavBarContainer = styled_components__WEBPACK_IMPORTED_MODULE_1__["default"].div(_templateObject || (_templateObject = _taggedTemplateLiteral(["\n  width: 200px;\n  height: 100vh;\n  color: white;\n  background-color: #4158D0;\n  background-image: linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%);\n  border-radius: 10px;\n  box-shadow: 20px 20px 60px #90abd9, -20px -20px 60px #c2e7ff;\n  padding: 20px;\n  position: fixed;\n  left: 0;\n  top: 0;\n  transform: ", ";\n  transition: transform 0.3s ease;\n  z-index: 1;\n\n  @media (min-width: 769px) {\n    transform: none;\n  }\n"])), function (props) {
+  return props.isOpen ? 'translateX(0)' : 'translateX(-100%)';
 });
-var NavLink = (0,styled_components__WEBPACK_IMPORTED_MODULE_1__["default"])(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Link)(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(["\n  margin: 50px 0;\n  display: block;\n  padding: 10px 20px;\n  font-size: 16px;\n  font-weight: bold;\n  color: white;\n  text-decoration: none;\n  backdrop-filter: blur(16px) saturate(180%);\n  -webkit-backdrop-filter: blur(16px) saturate(180%);\n  background-color: rgba(17, 25, 40, 0.75);\n  border: none;\n  border-radius: 5px;\n  cursor: pointer;\n  transition: transform 0.3s ease;\n\n  &:hover {\n    transform: scale(1.1);\n    color: white;\n  }\n\n  @media (max-width: 768px) {\n    margin: 20px 0;\n    font-size: 14px;\n    width: auto;\n  }\n"])));
-var ToggleButton = styled_components__WEBPACK_IMPORTED_MODULE_1__["default"].a(_templateObject3 || (_templateObject3 = _taggedTemplateLiteral(["\n  display: none;\n  position: fixed;\n  top: 20px;\n  left: 20px;\n  background-color: transparent;\n  border: none;\n  font-size: 24px;\n  color: black;\n  cursor: pointer;\n  z-index: 2;\n\n  @media (max-width: 768px) {\n    display: block;\n  }\n"])));
-var NavBar = function NavBar() {
+var NavLink = (0,styled_components__WEBPACK_IMPORTED_MODULE_1__["default"])(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Link)(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(["\n  margin: 50px 0;\n  display: block;\n  padding: 10px 20px;\n  font-size: 16px;\n  font-weight: bold;\n  color: white;\n  text-decoration: none;\n  backdrop-filter: blur(16px) saturate(180%);\n    -webkit-backdrop-filter: blur(16px) saturate(180%);\n    background-color: rgba(17, 25, 40, 0.75);\n    border-radius: 12px;\n    border: 1px solid rgba(255, 255, 255, 0.125);\n  border: none;\n  border-radius: 5px;\n  cursor: pointer;\n  transition: transform 0.3s ease;\n\n  &:hover {\n    transform: scale(1.1);\n    color: white; \n  }\n\n  @media (max-width: 768px) {\n    margin: 20px 0;\n    font-size: 14px;\n    width: auto;\n  }\n"])));
+var ToggleButton = styled_components__WEBPACK_IMPORTED_MODULE_1__["default"].button(_templateObject3 || (_templateObject3 = _taggedTemplateLiteral(["\n  display: none;\n  position: fixed;\n  top: 20px;\n  left: 20px;\n  background-color: transparent;\n  border: none;\n  font-size: 24px;\n  color: white;\n  cursor: pointer;\n  z-index: 2;\n\n  @media (max-width: 768px) {\n    display: block;\n  }\n"])));
+var LogoutButton = styled_components__WEBPACK_IMPORTED_MODULE_1__["default"].div(_templateObject4 || (_templateObject4 = _taggedTemplateLiteral(["\nmargin: 50px 0;\ndisplay: block;\npadding: 10px 20px;\nfont-size: 16px;\nfont-weight: bold;\ncolor: white;\ntext-decoration: none;\nbackdrop-filter: blur(16px) saturate(180%);\n  -webkit-backdrop-filter: blur(16px) saturate(180%);\n  background-color: rgba(17, 25, 40, 0.75);\n  border-radius: 12px;\n  border: 1px solid rgba(255, 255, 255, 0.125);\nborder: none;\nborder-radius: 5px;\ncursor: pointer;\ntransition: transform 0.3s ease;\n\n&:hover {\n  transform: scale(1.1);\n  color: white; \n}\n\n@media (max-width: 768px) {\n  margin: 20px 0;\n  font-size: 14px;\n  width: auto;\n}\n"])));
+var NavBar = function NavBar(_ref) {
+  var onLogout = _ref.onLogout;
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState2 = _slicedToArray(_useState, 2),
-    isopen = _useState2[0],
-    setisopen = _useState2[1];
+    isOpen = _useState2[0],
+    setIsOpen = _useState2[1];
   var handleToggle = function handleToggle() {
-    setisopen(!isopen);
+    setIsOpen(!isOpen);
+  };
+  var handleLogout = function handleLogout() {
+    setIsOpen(false);
+    onLogout();
   };
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(ToggleButton, {
     onClick: handleToggle
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("i", {
-    className: "fas ".concat(isopen ? 'fa-times' : 'fa-bars')
+    className: "fas ".concat(isOpen ? 'fa-times' : 'fa-bars'),
+    style: {
+      color: 'black'
+    }
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(NavBarContainer, {
-    $isopen: isopen
+    isOpen: isOpen
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", {
     style: {
       marginTop: '50px'
@@ -495,7 +542,9 @@ var NavBar = function NavBar() {
   }, "Stock"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(NavLink, {
     to: "/Profile",
     onClick: handleToggle
-  }, "Admin")));
+  }, "Admin"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(LogoutButton, {
+    onClick: handleLogout
+  }, "Logout")));
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (NavBar);
 
