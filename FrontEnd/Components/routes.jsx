@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Home from './src/Home.jsx';
@@ -8,7 +8,7 @@ import Admin from "./src/Admin.jsx";
 import Stock from "./src/Stock.jsx";
 
 
-const NotFound = () => <h1>404! Page Not Found</h1>;
+const Not_Found = () => <h1 style={{color:'black'}}>404! Page Not Found</h1>;
 
 const ContentContainer = styled.div`
   margin-left: 200px;
@@ -25,22 +25,48 @@ const ContentContainer = styled.div`
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const handleLogin = () => {
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      fetch('http://localhost:8000/secure', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.message === 'Secure connection') {
+            setIsLoggedIn(true);
+          } else {
+            setIsLoggedIn(false);
+          }
+        })
+        .catch(() => setIsLoggedIn(false));
+    }
+  }, []);
+
+  const handleLogin = (token) => {
+    localStorage.setItem('token', token);
     setIsLoggedIn(true);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setIsLoggedIn(false);
   };
 
   return (
     <Router>
       {isLoggedIn ? (
         <>
-          <NavBar />
+          <NavBar onLogout={handleLogout} />
           <ContentContainer>
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/Profile" element={<Admin />} />
               <Route path="/Stock" element={<Stock />} />
               <Route path="/login" element={<Navigate to="/" />} />
-              <Route path="*" element={<NotFound />} />
+              <Route path="*" element={<Not_Found />} />
             </Routes>
           </ContentContainer>
         </>
