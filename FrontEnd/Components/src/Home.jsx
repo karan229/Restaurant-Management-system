@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
 
 function Home() {
 
@@ -9,29 +10,24 @@ function Home() {
   const todayRevenue = 5000;
 
   const avgCustomers = 100;
-  
-  const outOfStockItems = [
 
-    { id: 1, name: 'Item 1', quantity: 1 },
-    
-    { id: 2, name: 'Item 2', quantity: 2 },
-    
-    { id: 3, name: 'Item 3', quantity: 1 },
+  const [items,setItems] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
-    { id: 4, name: 'Item 4', quantity: 3 }
 
-  ];
-
+  const getItems =  () => {
+    return  axios.get(`http://localhost:8000/items`).then(response => response.data)
+            .then((data) => {
+              setItems(data)
+              setIsLoading(false);
+            });
+  }
   useEffect(() => {
-    const rootElement = document.getElementById('root');
-    rootElement.classList.add('rootFullWidth');
-
-    return () => {
-      rootElement.classList.remove('rootFullWidth');
-    };
+    getItems();
   }, []);
 
   return (
+    !isLoading &&(
     <div className="dashboardBox">
       <div className="cards">
         
@@ -58,12 +54,14 @@ function Home() {
       <div className="outOfStock">
         <h2>Out of Stock</h2>
         <ul>
-          {outOfStockItems.map(item => (
-            <li key={item.id}>{item.name}</li>
+        {items?.map((item) => (
+            <li key={item.id}>{item?.ItemName} <span style={{float: 'right'}}>Quantity Available:{item.quantity}</span></li>
           ))}
         </ul>
       </div>
     </div>
+    )
+
   );
 }
 

@@ -1,0 +1,99 @@
+.titleResto {
+    padding: 15px;
+    text-align: center;
+    color: white;
+    font-size: 2.5rem;
+}
+
+.restoPageContainer {
+    margin-top: 509px;
+    background-image: linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%);
+    margin-left: -200px;
+    padding: 10px;
+
+}
+
+.bannerImageResto img {
+    height: auto;
+    width: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+}
+
+
+.bannerImageResto {
+    margin: 20px auto;
+    width: 100%;
+}
+
+.foodItem {
+    flex-wrap: wrap;
+    display: flex;
+    gap: 20px;
+    padding: 20px;
+    justify-content: center;
+}
+
+.featuredTitleText {
+    margin: 20px;
+    text-align: center;
+    font-size: 2rem;
+    color: white;
+}
+
+.foodcard {
+    width: 250px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    margin: 10px;
+    text-align: center;
+    background-color: #fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s, box-shadow 0.3s;
+    border-radius: 10px;
+}
+
+.foodcard img {
+    width: 100%;
+    height: 150px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+.foodcard:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    transform: translateY(-10px);
+}
+
+.foodcard p {
+    font-size: 1rem;
+    color: #555;
+}
+
+.foodcard h2 {
+    font-size: 1.5rem;
+    color: black;
+    margin-top: 15px;
+}
+
+@media (max-width: 768px) {
+    
+    .foodcard {
+        width: 80%;
+    }
+    
+    .foodItem {
+        align-items: center;
+        flex-direction: column;
+    }
+
+    .restoPageContainer{
+        margin-top: 1047px;
+        margin-left: auto;
+        margin-right: auto;   
+    }
+
+    .bannerImageResto {
+        width: 90%;
+    }
+}
