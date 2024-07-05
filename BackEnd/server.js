@@ -53,6 +53,15 @@ const userSchema = new mongoose.Schema({
   status: { type: String, default: 'active' },
 });
 
+const itemsSchema = new mongoose.Schema({
+  itemName: { type: String, required: true, unique: true },
+  quantity: { type: Number, required: true, unique: true },
+  price: { type: Number, required: true },
+  available: { type: Boolean, required: true },
+});
+
+const Items = mongoose.model('items', itemsSchema);
+
 const User = mongoose.model('User', userSchema);
 
 
@@ -120,7 +129,20 @@ app.post('/login', async (req, res) => {
   }
 });
 
+app.get('/items', async (req, res) => {
 
+  try {
+    const items = await Items.find();
+    if (!items) {
+      return res.status(404).json({ message: 'No Items' });
+    }
+
+    
+    res.status(200).json(items);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching item details', error });
+  }
+});
 
 // Middleware for login & registeration by using jwt tokens; reference - https://www.youtube.com/watch?v=dX_LteE0NFM
 const authenticateToken = (req, res, next) => {
