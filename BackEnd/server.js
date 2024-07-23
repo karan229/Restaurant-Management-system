@@ -158,9 +158,17 @@ const authenticateToken = (req, res, next) => {
   });
 };
 
+const checkAdmin = (req, res, next) => {
+  if (req.user.userType !== 'admin') {
+    return res.status(403).json({ message: 'Access denied. Admins only.' });
+  }
+  next();
+};
+
 app.get('/secure', authenticateToken, (req, res) => {
   res.json({ message: 'Secure connection', user: req.user });
 });
+
 
 app.get('/user/:email', async (req, res) => {
   try {
@@ -294,6 +302,15 @@ app.get('/admin-details', async (req, res) => {
   }
 });
 
+app.get('/inventory', authenticateToken, checkAdmin, async (req, res) => {
+  try {
+    const items = await Items.find();
+    res.status(200).json(items);
+  } catch (error) {
+    console.error('Error fetching inventory items:', error);
+    res.status(500).json({ message: 'Error fetching inventory items', error });
+  }
+});
 
 const port = process.env.PORT || 8000;
 

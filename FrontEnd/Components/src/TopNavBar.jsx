@@ -1,6 +1,15 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+
+const LogoutButton = styled.button`
+  margin: 50px 0;
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+`;
 
 const TopNavBarContainer = styled.div`
   width: 100%;
@@ -21,11 +30,26 @@ const NavLink = styled(Link)`
   }
 `;
 
-const TopNavBar = () => {
+const TopNavBar = ({ onLogout, isAdmin }) => {
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    onLogout();
+  };
+
+  const handleNavigation = (path) => {
+    if (path === '/Inventory' && !isAdmin) {
+      alert('You do not have access to Inventory.');
+    } else {
+      navigate(path);
+    }
+  };
+
   return (
     <TopNavBarContainer>
-      <NavLink to="/Order">Order</NavLink>
-      <NavLink to="/Inventory">Inventory</NavLink>
+      <NavLink onClick={() => handleNavigation('/Order')}>Order</NavLink>
+      <NavLink onClick={() => handleNavigation('/Inventory')}>Inventory</NavLink>
+      <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
     </TopNavBarContainer>
   );
 };

@@ -10,7 +10,7 @@ import Admin from "./src/Admin.jsx";
 import Stock from "./src/Stock.jsx";
 import Order from './src/Order.jsx';
 
-const Not_Found = () => <h1 style={{color:'black'}}>404! Page Not Found</h1>;
+const Not_Found = () => <h1 style={{ color: 'black' }}>404! Page Not Found</h1>;
 
 const ContentContainer = styled.div`
   margin-left: 200px;
@@ -26,19 +26,20 @@ const ContentContainer = styled.div`
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userType, setUserType] = useState(null);
 
   useEffect(() => {
     const checkLoginStatus = () => {
       const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
       if (loggedIn) {
         setIsLoggedIn(true);
+        setUserType(localStorage.getItem('userType'));
       } else {
         setIsLoggedIn(false);
       }
     };
 
     checkLoginStatus();
-
 
     const token = localStorage.getItem('token');
     if (token) {
@@ -56,31 +57,38 @@ export default function App() {
       .then(data => {
         if (data.message === 'Secure connection') {
           setIsLoggedIn(true);
+          setUserType(data.user.userType);
+          localStorage.setItem('userType', data.user.userType);
         } else {
           setIsLoggedIn(false);
-          clearAuthData(); // Clear invalid token
+          clearAuthData();
         }
       })
       .catch(() => {
         setIsLoggedIn(false);
-        clearAuthData(); // Clear on error
+        clearAuthData();
       });
   };
 
-  const handleLogin = (token) => {
+  const handleLogin = (token, userType) => {
     localStorage.setItem('token', token);
     localStorage.setItem('isLoggedIn', 'true');
+    localStorage.setItem('userType', userType);
     setIsLoggedIn(true);
+    setUserType(userType);
   };
 
   const handleLogout = () => {
+    console.log('Logout button clicked'); // Debug line
     clearAuthData();
     setIsLoggedIn(false);
+    setUserType(null);
   };
 
   const clearAuthData = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('userType');
   };
 
   return (
@@ -94,7 +102,11 @@ export default function App() {
               <Route path="/Profile" element={<Admin />} />
               <Route path="/Stock" element={<Stock />} />
               <Route path="/Order" element={<Order />} />
-              <Route path="/Inventory" element={<Home />} />
+              {userType === 'admin' ? (
+                <Route path="/Inventory" element={<Home />} />
+              ) : (
+                <Route path="/Inventory" element={<Navigate to="/" />} />
+              )}
               <Route path="/login" element={<Navigate to="/" />} />
               <Route path="*" element={<Not_Found />} />
             </Routes>
@@ -112,13 +124,13 @@ export default function App() {
 
 const ConditionalNavBar = ({ onLogout }) => {
   const location = useLocation();
+  const userType = localStorage.getItem('userType');
   const showNavBar = ['/Inventory', '/Stock', '/admin', '/Profile'].includes(location.pathname);
   const showTopNavBar = location.pathname === '/';
 
-
   return (
     <>
-      {showTopNavBar && <TopNavBar />}
+      {showTopNavBar && <TopNavBar onLogout={onLogout} />}
       {showNavBar && <NavBar onLogout={onLogout} />}
     </>
   );
