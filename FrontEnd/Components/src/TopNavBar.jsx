@@ -31,18 +31,6 @@ const NavLink = styled(Link)`
   }
 `;
 
-const LogoutButton = styled.button`
-  background-color: #f44;
-  color: white;
-  border: none;
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #c33;
-  }
-`;
 
 const TopNavBar = ({ onLogout }) => {
   return (
