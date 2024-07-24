@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from 'axios';
 import styled from 'styled-components';
 
@@ -97,7 +97,7 @@ const Login = ({ onLogin }) => {
   };
 
   return (
-    <div className="container" id="container">
+    <div className="container" id="container" ref={containerRef}>
       <div className="form-container sign-up-container">
         <form onSubmit={handleRegister}>
           <h3>Create Account</h3>
@@ -128,12 +128,12 @@ const Login = ({ onLogin }) => {
           <div className="overlay-panel overlay-left">
             <h1>Welcome Back!</h1>
             <p>Already have an Account? Simply click sign in.</p>
-            <button className="ghost" id="signIn">Sign In</button>
+            <button className="ghost" id="signIn" ref={signInButtonRef}>Sign In</button>
           </div>
           <div className="overlay-panel overlay-right">
             <h1>RIMS</h1>
             <p>Enter your credentials and start your journey with us!</p>
-            <button className="ghost" id="signUp">Register</button>
+            <button className="ghost" id="signUp" ref={signUpButtonRef}>Register</button>
           </div>
         </div>
       </div>

@@ -11,6 +11,7 @@ import Stock from "./src/Stock.jsx";
 import Order from './src/Order.jsx';
 
 const Not_Found = () => <h1 style={{ color: 'black' }}>404! Page Not Found</h1>;
+const Not_Found = () => <h1 style={{ color: 'black' }}>404! Page Not Found</h1>;
 
 const ContentContainer = styled.div`
   margin-left: 200px;
@@ -62,23 +63,29 @@ export default function App() {
         } else {
           setIsLoggedIn(false);
           clearAuthData();
+          clearAuthData();
         }
       })
       .catch(() => {
         setIsLoggedIn(false);
         clearAuthData();
+        clearAuthData();
       });
   };
 
   const handleLogin = (token, userType) => {
+  const handleLogin = (token, userType) => {
     localStorage.setItem('token', token);
     localStorage.setItem('isLoggedIn', 'true');
     localStorage.setItem('userType', userType);
+    localStorage.setItem('userType', userType);
     setIsLoggedIn(true);
+    setUserType(userType);
     setUserType(userType);
   };
 
   const handleLogout = () => {
+    console.log('Logout button clicked'); // Debug line
     clearAuthData();
     setIsLoggedIn(false);
     setUserType('');
@@ -87,6 +94,7 @@ export default function App() {
   const clearAuthData = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('userType');
     localStorage.removeItem('userType');
   };
 
@@ -119,11 +127,13 @@ export default function App() {
 
 const ConditionalNavBar = ({ onLogout }) => {
   const location = useLocation();
+  const userType = localStorage.getItem('userType');
   const showNavBar = ['/Inventory', '/Stock', '/admin', '/Profile'].includes(location.pathname);
   const showTopNavBar = location.pathname === '/';
 
   return (
     <>
+      {showTopNavBar && <TopNavBar onLogout={onLogout} />}
       {showTopNavBar && <TopNavBar onLogout={onLogout} />}
       {showNavBar && <NavBar onLogout={onLogout} />}
     </>

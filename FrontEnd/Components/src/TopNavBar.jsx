@@ -1,6 +1,15 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+
+const LogoutButton = styled.button`
+  margin: 50px 0;
+  background-color: red;
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+`;
 
 const TopNavBarContainer = styled.div`
   width: 100%;

@@ -158,9 +158,17 @@ const authenticateToken = (req, res, next) => {
   });
 };
 
+const checkAdmin = (req, res, next) => {
+  if (req.user.userType !== 'admin') {
+    return res.status(403).json({ message: 'Access denied. Admins only.' });
+  }
+  next();
+};
+
 app.get('/secure', authenticateToken, (req, res) => {
   res.json({ message: 'Secure connection', user: req.user });
 });
+
 
 app.get('/user/:email', async (req, res) => {
   try {

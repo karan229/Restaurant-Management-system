@@ -36,8 +36,6 @@ const NavLink = styled(Link)`
   background-color: rgba(17, 25, 40, 0.75);
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.125);
-  border: none;
-  border-radius: 5px;
   cursor: pointer;
   transition: transform 0.3s ease;
 
@@ -91,6 +89,7 @@ const NavBar = ({ onLogout }) => {
       <ToggleButton onClick={handleToggle}>
         <i className={`fas ${isOpen ? 'fa-times' : 'fa-bars'}`} style={{ color: 'black' }}></i>
       </ToggleButton>
+      <NavBarContainer $isOpen={isOpen}>
       <NavBarContainer $isOpen={isOpen}>
         <NavLink to="/" onClick={handleToggle}>Dashboard</NavLink>
         <NavLink to="/Inventory" onClick={handleToggle}>Home</NavLink>
