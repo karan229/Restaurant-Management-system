@@ -90,7 +90,6 @@ const NavBar = ({ onLogout }) => {
         <i className={`fas ${isOpen ? 'fa-times' : 'fa-bars'}`} style={{ color: 'black' }}></i>
       </ToggleButton>
       <NavBarContainer $isOpen={isOpen}>
-      <NavBarContainer $isOpen={isOpen}>
         <NavLink to="/" onClick={handleToggle}>Dashboard</NavLink>
         <NavLink to="/Inventory" onClick={handleToggle}>Home</NavLink>
         <NavLink to="/Stock" onClick={handleToggle}>Stock</NavLink>
