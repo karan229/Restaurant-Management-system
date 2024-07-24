@@ -302,15 +302,19 @@ app.get('/admin-details', async (req, res) => {
   }
 });
 
-app.get('/inventory', authenticateToken, checkAdmin, async (req, res) => {
-  try {
-    const items = await Items.find();
-    res.status(200).json(items);
-  } catch (error) {
-    console.error('Error fetching inventory items:', error);
-    res.status(500).json({ message: 'Error fetching inventory items', error });
+const authenticateAdmin = (req, res, next) => {
+  const { userType } = req.user;
+  if (userType === 'admin') {
+    next();
+  } else {
+    res.status(403).json({ message: 'Access denied: Admins only' });
   }
+};
+
+app.get('/inventory', authenticateToken, authenticateAdmin, async (req, res) => {
+  res.json({ message: 'Welcome to Inventory' });
 });
+
 
 const port = process.env.PORT || 8000;
 

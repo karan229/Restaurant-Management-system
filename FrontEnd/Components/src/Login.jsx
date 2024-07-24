@@ -24,28 +24,31 @@ const Login = ({ onLogin }) => {
   const [message, setMessage] = useState('');
   const [error, setError] = useState(false);
 
-  const signUpButtonRef = useRef(null);
-  const signInButtonRef = useRef(null);
-  const containerRef = useRef(null);
-
   useEffect(() => {
-    const signUpButton = signUpButtonRef.current;
-    const signInButton = signInButtonRef.current;
-    const container = containerRef.current;
+    const signInButton = document.getElementById("signIn");
+    const signUpButton = document.getElementById("signUp");
 
+    if (signInButton && signUpButton) {
+      signInButton.addEventListener('click', () => {
+        document.getElementById("container").classList.remove("right-panel-active");
+      });
 
-    if (signUpButton && signInButton && container) {
-      const addClass = () => container.classList.add('right-panel-active');
-      const removeClass = () => container.classList.remove('right-panel-active');
-      
-      signUpButton.addEventListener('click', addClass);
-      signInButton.addEventListener('click', removeClass);
-
-      return () => {
-        signUpButton.removeEventListener('click', addClass);
-        signInButton.removeEventListener('click', removeClass);
-      };
+      signUpButton.addEventListener('click', () => {
+        document.getElementById("container").classList.add("right-panel-active");
+      });
     }
+
+    return () => {
+      if (signInButton && signUpButton) {
+        signInButton.removeEventListener('click', () => {
+          document.getElementById("container").classList.remove("right-panel-active");
+        });
+
+        signUpButton.removeEventListener('click', () => {
+          document.getElementById("container").classList.add("right-panel-active");
+        });
+      }
+    };
   }, []);
 
   const handleLogin = async (e) => {

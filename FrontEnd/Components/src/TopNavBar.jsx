@@ -18,6 +18,7 @@ const TopNavBarContainer = styled.div`
   display: flex;
   justify-content: space-around;
   padding: 10px;
+  align-items: center;
 `;
 
 const NavLink = styled(Link)`
@@ -30,26 +31,25 @@ const NavLink = styled(Link)`
   }
 `;
 
-const TopNavBar = ({ onLogout, isAdmin }) => {
-  const navigate = useNavigate();
+const LogoutButton = styled.button`
+  background-color: #f44;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
 
-  const handleLogout = () => {
-    onLogout();
-  };
+  &:hover {
+    background-color: #c33;
+  }
+`;
 
-  const handleNavigation = (path) => {
-    if (path === '/Inventory' && !isAdmin) {
-      alert('You do not have access to Inventory.');
-    } else {
-      navigate(path);
-    }
-  };
-
+const TopNavBar = ({ onLogout }) => {
   return (
     <TopNavBarContainer>
-      <NavLink onClick={() => handleNavigation('/Order')}>Order</NavLink>
-      <NavLink onClick={() => handleNavigation('/Inventory')}>Inventory</NavLink>
-      <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
+      <NavLink to="/Order">Order</NavLink>
+      <NavLink to="/Inventory">Inventory</NavLink>
+      <LogoutButton onClick={onLogout}>Logout</LogoutButton>
     </TopNavBarContainer>
   );
 };
