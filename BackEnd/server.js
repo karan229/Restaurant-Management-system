@@ -294,6 +294,19 @@ app.get('/admin-details', async (req, res) => {
   }
 });
 
+const authenticateAdmin = (req, res, next) => {
+  const { userType } = req.user;
+  if (userType === 'admin') {
+    next();
+  } else {
+    res.status(403).json({ message: 'Access denied: Admins only' });
+  }
+};
+
+app.get('/inventory', authenticateToken, authenticateAdmin, async (req, res) => {
+  res.json({ message: 'Welcome to Inventory' });
+});
+
 
 const port = process.env.PORT || 8000;
 

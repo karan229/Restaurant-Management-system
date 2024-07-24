@@ -9,6 +9,7 @@ const TopNavBarContainer = styled.div`
   display: flex;
   justify-content: space-around;
   padding: 10px;
+  align-items: center;
 `;
 
 const NavLink = styled(Link)`
@@ -21,11 +22,25 @@ const NavLink = styled(Link)`
   }
 `;
 
-const TopNavBar = () => {
+const LogoutButton = styled.button`
+  background-color: #f44;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #c33;
+  }
+`;
+
+const TopNavBar = ({ onLogout }) => {
   return (
     <TopNavBarContainer>
       <NavLink to="/Order">Order</NavLink>
       <NavLink to="/Inventory">Inventory</NavLink>
+      <LogoutButton onClick={onLogout}>Logout</LogoutButton>
     </TopNavBarContainer>
   );
 };

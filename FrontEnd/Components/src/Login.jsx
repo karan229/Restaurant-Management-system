@@ -24,6 +24,33 @@ const Login = ({ onLogin }) => {
   const [message, setMessage] = useState('');
   const [error, setError] = useState(false);
 
+  useEffect(() => {
+    const signInButton = document.getElementById("signIn");
+    const signUpButton = document.getElementById("signUp");
+
+    if (signInButton && signUpButton) {
+      signInButton.addEventListener('click', () => {
+        document.getElementById("container").classList.remove("right-panel-active");
+      });
+
+      signUpButton.addEventListener('click', () => {
+        document.getElementById("container").classList.add("right-panel-active");
+      });
+    }
+
+    return () => {
+      if (signInButton && signUpButton) {
+        signInButton.removeEventListener('click', () => {
+          document.getElementById("container").classList.remove("right-panel-active");
+        });
+
+        signUpButton.removeEventListener('click', () => {
+          document.getElementById("container").classList.add("right-panel-active");
+        });
+      }
+    };
+  }, []);
+
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
@@ -35,7 +62,6 @@ const Login = ({ onLogin }) => {
       localStorage.setItem('userType', response.data.userType);
       localStorage.setItem('userEmail', response.data.email);
       localStorage.setItem('isLoggedIn', 'true');
-
 
       const userResponse = await axios.get(`http://localhost:8000/user/${email}`);
       const username = userResponse.data.username;

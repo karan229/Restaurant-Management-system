@@ -14,7 +14,7 @@ const NavBarContainer = styled.div`
   position: fixed;
   left: 0;
   top: 0;
-  transform: ${(props) => (props.isOpen ? 'translateX(0)' : 'translateX(-100%)')};
+  transform: ${(props) => (props.$isOpen ? 'translateX(0)' : 'translateX(-100%)')};
   transition: transform 0.3s ease;
   z-index: 1;
 
@@ -91,7 +91,7 @@ const NavBar = ({ onLogout }) => {
       <ToggleButton onClick={handleToggle}>
         <i className={`fas ${isOpen ? 'fa-times' : 'fa-bars'}`} style={{ color: 'black' }}></i>
       </ToggleButton>
-      <NavBarContainer isOpen={isOpen}>
+      <NavBarContainer $isOpen={isOpen}>
         <NavLink to="/" onClick={handleToggle}>Dashboard</NavLink>
         <NavLink to="/Inventory" onClick={handleToggle}>Home</NavLink>
         <NavLink to="/Stock" onClick={handleToggle}>Stock</NavLink>
