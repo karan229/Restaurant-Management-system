@@ -24,32 +24,7 @@ const Login = ({ onLogin }) => {
   const [message, setMessage] = useState('');
   const [error, setError] = useState(false);
 
-  useEffect(() => {
-    const signInButton = document.getElementById("signIn");
-    const signUpButton = document.getElementById("signUp");
-
-    if (signInButton && signUpButton) {
-      signInButton.addEventListener('click', () => {
-        document.getElementById("container").classList.remove("right-panel-active");
-      });
-
-      signUpButton.addEventListener('click', () => {
-        document.getElementById("container").classList.add("right-panel-active");
-      });
-    }
-
-    return () => {
-      if (signInButton && signUpButton) {
-        signInButton.removeEventListener('click', () => {
-          document.getElementById("container").classList.remove("right-panel-active");
-        });
-
-        signUpButton.removeEventListener('click', () => {
-          document.getElementById("container").classList.add("right-panel-active");
-        });
-      }
-    };
-  }, []);
+  const containerRef = useRef(null); // Declare and initialize containerRef
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -96,6 +71,18 @@ const Login = ({ onLogin }) => {
     }
   };
 
+  const handleSignIn = () => {
+    if (containerRef.current) {
+      containerRef.current.classList.remove("right-panel-active");
+    }
+  };
+
+  const handleSignUp = () => {
+    if (containerRef.current) {
+      containerRef.current.classList.add("right-panel-active");
+    }
+  };
+
   return (
     <div className="container" id="container" ref={containerRef}>
       <div className="form-container sign-up-container">
@@ -128,12 +115,12 @@ const Login = ({ onLogin }) => {
           <div className="overlay-panel overlay-left">
             <h1>Welcome Back!</h1>
             <p>Already have an Account? Simply click sign in.</p>
-            <button className="ghost" id="signIn" ref={signInButtonRef}>Sign In</button>
+            <button className="ghost" id="signIn" onClick={handleSignIn}>Sign In</button>
           </div>
           <div className="overlay-panel overlay-right">
             <h1>RIMS</h1>
             <p>Enter your credentials and start your journey with us!</p>
-            <button className="ghost" id="signUp" ref={signUpButtonRef}>Register</button>
+            <button className="ghost" id="signUp" onClick={handleSignUp}>Register</button>
           </div>
         </div>
       </div>
