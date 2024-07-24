@@ -11,7 +11,6 @@ import Stock from "./src/Stock.jsx";
 import Order from './src/Order.jsx';
 
 const Not_Found = () => <h1 style={{ color: 'black' }}>404! Page Not Found</h1>;
-const Not_Found = () => <h1 style={{ color: 'black' }}>404! Page Not Found</h1>;
 
 const ContentContainer = styled.div`
   margin-left: 200px;
