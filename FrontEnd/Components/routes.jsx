@@ -9,6 +9,7 @@ import TopNavBar from "./src/TopNavBar.jsx";
 import Admin from "./src/Admin.jsx";
 import Stock from "./src/Stock.jsx";
 import Order from './src/Order.jsx';
+import RestoNavbar from "./src/RestoNavbar.jsx";
 
 const NotFound = () => <h1 style={{ color: 'black' }}>404! Page Not Found</h1>;
 
@@ -122,11 +123,13 @@ const ConditionalNavBar = ({ onLogout }) => {
   const location = useLocation();
   const showNavBar = ['/Inventory', '/Stock', '/Profile'].includes(location.pathname);
   const showTopNavBar = location.pathname === '/';
+  const showRestoNavbar = location.pathname === '/Order';
 
   return (
     <>
       {showTopNavBar && <TopNavBar onLogout={onLogout} />}
       {showNavBar && <NavBar onLogout={onLogout} />}
+      {showRestoNavbar && <RestoNavbar />}
     </>
   );
 };
