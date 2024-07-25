@@ -951,9 +951,9 @@ td {
 }
 
 .confirmation-container button {
-  background-color: rgba(17, 25, 40, 0.75); /* Darker background for contrast */
+  background-color: rgba(17, 25, 40, 0.75);
   color: white;
-  border: 1px solid rgba(255, 255, 255, 0.125); /* Light border for contrast */
+  border: 1px solid rgba(255, 255, 255, 0.125);
   border-radius: 12px;
   padding: 10px 20px;
   font-size: 16px;
@@ -984,7 +984,7 @@ td {
   padding: 20px;
   margin: 20px;
   text-align: center;
-  min-height: 100vh; /* Ensure it takes up the full height of the viewport */
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -996,7 +996,7 @@ td {
 
 .checkout-list {
   margin-bottom: 20px;
-  max-height: 400px; /* Adjusted height to fit more items */
+  max-height: 400px;
   overflow-y: auto;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 8px;
@@ -1032,14 +1032,14 @@ td {
 
 .email-bill-container {
   display: flex;
-  flex-direction: column; /* Stacks input and button vertically */
+  flex-direction: column;
   align-items: center;
   margin-top: 20px;
 }
 
 .email-input {
   width: 100%;
-  max-width: 400px; /* Limit width for better appearance */
+  max-width: 400px;
   margin-bottom: 10px;
 }
 
@@ -1059,7 +1059,7 @@ td {
 
 .generate-bill {
   width: 100%;
-  max-width: 400px; /* Match the width of email input */
+  max-width: 400px;
 }
 
 .generate-bill button {
