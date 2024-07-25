@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef } from "react";
 import axios from 'axios';
 import styled from 'styled-components';
 
 const Message = styled.div`
   margin-top: 20px;
   font-size: 16px;
-  color: ${(props) => (props.error ? 'red' : 'green')};
+  color: ${(props) => (props.error === 'true' ? 'red' : 'green')};
 `;
 
 const Select = styled.select`
@@ -97,7 +97,7 @@ const Login = ({ onLogin }) => {
             <option value="user">User</option>
           </Select>
           <button id="btn">Register</button>
-          {message && <Message error={error}>{message}</Message>}
+          {message && <Message error={error ? 'true' : 'false'}>{message}</Message>}
         </form>
       </div>
       <div className="form-container sign-in-container">
@@ -107,7 +107,7 @@ const Login = ({ onLogin }) => {
           <input type="password" placeholder="Password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
           <a href="#" style={{ color: "white" }}>Forgot password? Don't worry we got you!</a>
           <button type="submit">Log In</button>
-          {message && <Message error={error}>{message}</Message>}
+          {message && <Message error={error ? 'true' : 'false'}>{message}</Message>}
         </form>
       </div>
       <div className="overlay-container">
