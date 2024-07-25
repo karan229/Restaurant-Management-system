@@ -19,7 +19,6 @@ import ConfirmationPage from './src/Dining/Confirm.jsx';
 const NotFound = () => <h1 style={{ color: 'black' }}>404! Page Not Found</h1>;
 
 const ContentContainer = styled.div`
-  margin-left: 200px;
   padding: 20px;
 
   @media (max-width: 768px) {
@@ -132,7 +131,10 @@ const ConditionalNavBar = ({ onLogout }) => {
   const location = useLocation();
   const showNavBar = ['/Inventory', '/Stock', '/Profile'].includes(location.pathname);
   const showTopNavBar = location.pathname === '/';
-  const showRestoNavbar = ['/Order', '/dining', '/menu'].includes(location.pathname);
+  const showRestoNavbar = location.pathname.startsWith('/Order') || 
+                          location.pathname.startsWith('/dining') || 
+                          location.pathname.startsWith('/menu') || 
+                          location.pathname.startsWith('/checkout');
 
   return (
     <>

@@ -5,6 +5,16 @@ import non from '../../Assets/non.jpg';
 import dessert from '../../Assets/dessert.jpg'; 
 
 const MenuPage = () => {
+
+  useEffect(() => {
+    const rootElement = document.getElementById("root");
+    rootElement.classList.add("rootFullWidth");
+
+    return () => {
+      rootElement.classList.remove("rootFullWidth");
+    };
+  }, []);
+
   const { tableId } = useParams();
   const navigate = useNavigate();
   const [selectedCategory, setSelectedCategory] = useState('veg');

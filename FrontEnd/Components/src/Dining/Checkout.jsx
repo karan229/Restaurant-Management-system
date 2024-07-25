@@ -1,7 +1,17 @@
-import React, { useState } from "react";
+import React, {useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const CheckoutPage = () => {
+
+  useEffect(() => {
+    const rootElement = document.getElementById("root");
+    rootElement.classList.add("rootFullWidth");
+
+    return () => {
+      rootElement.classList.remove("rootFullWidth");
+    };
+  }, []);
+
   const location = useLocation();
   const navigate = useNavigate();
   const { tableId, selectedItems: initialItems } = location.state;

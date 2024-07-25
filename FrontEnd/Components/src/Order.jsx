@@ -2,10 +2,16 @@ import React, { useEffect } from "react";
 
 const Order = () => {
   useEffect(() => {
+
+    document.body.style.display = "block";
+
     const rootElement = document.getElementById("root");
     rootElement.classList.add("rootFullWidth");
 
     return () => {
+
+      document.body.style.display = "flex";
+      
       rootElement.classList.remove("rootFullWidth");
     };
   }, []);

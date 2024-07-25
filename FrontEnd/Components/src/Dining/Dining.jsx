@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const DiningPage = () => {
+  
   const navigate = useNavigate();
   
   const tables = [
@@ -11,10 +12,19 @@ const DiningPage = () => {
     { id: 4, name: 'Table 4' },
     { id: 5, name: 'Table 5' },
   ];
-
+  
   const handleTableClick = (tableId) => {
     navigate(`/menu/${tableId}`);
   };
+  
+  useEffect(() => {
+    const rootElement = document.getElementById("root");
+    rootElement.classList.add("rootFullWidth");
+
+    return () => {
+      rootElement.classList.remove("rootFullWidth");
+    };
+  }, []);
 
   return (
     <div className='table-container'>

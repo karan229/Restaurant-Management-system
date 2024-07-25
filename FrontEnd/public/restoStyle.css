@@ -6,9 +6,8 @@
 }
 
 .restoPageContainer {
-    margin-top: 660px;
+    margin-top: 78px;
     background-image: linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%);
-    margin-left: -200px;
     padding: 10px;
 
 }
@@ -88,7 +87,7 @@
     }
 
     .restoPageContainer{
-        margin-top: 1047px;
+        margin-top: 30px;
         margin-left: auto;
         margin-right: auto;   
     }

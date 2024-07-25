@@ -27,6 +27,8 @@ function Home() {
     getItems();
   }, []);
 
+  const lessQuantityItems = items.filter(item => item.quantity < 15);
+
   return (
     !isLoading && (
       <div className="dashboardBox">
@@ -51,8 +53,11 @@ function Home() {
         <div className="outOfStock">
           <h2>Out of Stock</h2>
           <ul>
-            {items.map((item) => (
-              <li key={item.id || item._id}>{item.ItemName} <span style={{ float: 'right' }}>Quantity Available: {item.quantity}</span></li>
+            {lessQuantityItems.map((item) => (
+              <li key={item.id || item._id}>
+                {item.ItemName}
+              <span style={{ float: 'right' }}>Quantity Available: {item.quantity}</span>
+              </li>
             ))}
           </ul>
         </div>
