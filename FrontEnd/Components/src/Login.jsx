@@ -24,7 +24,7 @@ const Login = ({ onLogin }) => {
   const [message, setMessage] = useState('');
   const [error, setError] = useState(false);
 
-  const containerRef = useRef(null); // Declare and initialize containerRef
+  const containerRef = useRef(null);
 
   const handleLogin = async (e) => {
     e.preventDefault();
