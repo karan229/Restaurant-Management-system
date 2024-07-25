@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import RestoHome from './src/RestoHome.jsx';
@@ -10,6 +10,11 @@ import Admin from "./src/Admin.jsx";
 import Stock from "./src/Stock.jsx";
 import Order from './src/Order.jsx';
 import RestoNavbar from "./src/RestoNavbar.jsx";
+import Dining from './src/Dining/Dining.jsx';
+import Menu from './src/Dining/Menu.jsx';
+import CheckoutPage from './src/Dining/Checkout.jsx';
+import ConfirmationPage from './src/Dining/Confirm.jsx';
+
 
 const NotFound = () => <h1 style={{ color: 'black' }}>404! Page Not Found</h1>;
 
@@ -80,7 +85,7 @@ export default function App() {
   };
 
   const handleLogout = () => {
-    console.log('Logout button clicked'); // Debug line
+    console.log('Logout button clicked');
     clearAuthData();
     setIsLoggedIn(false);
     setUserType('');
@@ -104,6 +109,10 @@ export default function App() {
               <Route path="/Stock" element={<Stock />} />
               <Route path="/Order" element={<Order />} />
               <Route path="/Inventory" element={userType === 'admin' ? <Home /> : <Navigate to="/" />} />
+              <Route path="/dining" element={<Dining />} />
+              <Route path="/menu/:tableId" element={<Menu />} />
+              <Route path="/checkout" element={<CheckoutPage />} />
+              <Route path="/confirmation" element={<ConfirmationPage />} />
               <Route path="/login" element={<Navigate to="/" />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
@@ -123,7 +132,7 @@ const ConditionalNavBar = ({ onLogout }) => {
   const location = useLocation();
   const showNavBar = ['/Inventory', '/Stock', '/Profile'].includes(location.pathname);
   const showTopNavBar = location.pathname === '/';
-  const showRestoNavbar = location.pathname === '/Order';
+  const showRestoNavbar = ['/Order', '/dining', '/menu'].includes(location.pathname);
 
   return (
     <>
