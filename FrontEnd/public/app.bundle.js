@@ -84,7 +84,7 @@ var NotFound = function NotFound() {
     }
   }, "404! Page Not Found");
 };
-var ContentContainer = styled_components__WEBPACK_IMPORTED_MODULE_14__["default"].div(_templateObject || (_templateObject = _taggedTemplateLiteral(["\n  margin-left: 200px;\n  padding: 20px;\n\n  @media (max-width: 768px) {\n    margin: 0;\n    margin-top: 50px;\n    display: block;\n    font-size: 14px;\n  }\n"])));
+var ContentContainer = styled_components__WEBPACK_IMPORTED_MODULE_14__["default"].div(_templateObject || (_templateObject = _taggedTemplateLiteral(["\n  padding: 20px;\n\n  @media (max-width: 768px) {\n    margin: 0;\n    margin-top: 50px;\n    display: block;\n    font-size: 14px;\n  }\n"])));
 function App() {
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false),
     _useState2 = _slicedToArray(_useState, 2),
@@ -207,7 +207,7 @@ var ConditionalNavBar = function ConditionalNavBar(_ref) {
   var location = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_16__.useLocation)();
   var showNavBar = ['/Inventory', '/Stock', '/Profile'].includes(location.pathname);
   var showTopNavBar = location.pathname === '/';
-  var showRestoNavbar = ['/Order', '/dining', '/menu'].includes(location.pathname);
+  var showRestoNavbar = location.pathname.startsWith('/Order') || location.pathname.startsWith('/dining') || location.pathname.startsWith('/menu') || location.pathname.startsWith('/checkout');
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, showTopNavBar && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_src_TopNavBar_jsx__WEBPACK_IMPORTED_MODULE_5__["default"], {
     onLogout: onLogout
   }), showNavBar && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_src_Navbar_jsx__WEBPACK_IMPORTED_MODULE_4__["default"], {
@@ -348,6 +348,13 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 var CheckoutPage = function CheckoutPage() {
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    var rootElement = document.getElementById("root");
+    rootElement.classList.add("rootFullWidth");
+    return function () {
+      rootElement.classList.remove("rootFullWidth");
+    };
+  }, []);
   var location = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_1__.useLocation)();
   var navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_1__.useNavigate)();
   var _location$state = location.state,
@@ -540,6 +547,13 @@ var DiningPage = function DiningPage() {
   var handleTableClick = function handleTableClick(tableId) {
     navigate("/menu/".concat(tableId));
   };
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    var rootElement = document.getElementById("root");
+    rootElement.classList.add("rootFullWidth");
+    return function () {
+      rootElement.classList.remove("rootFullWidth");
+    };
+  }, []);
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "table-container"
   }, tables.map(function (table) {
@@ -594,6 +608,13 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 
 var MenuPage = function MenuPage() {
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    var rootElement = document.getElementById("root");
+    rootElement.classList.add("rootFullWidth");
+    return function () {
+      rootElement.classList.remove("rootFullWidth");
+    };
+  }, []);
   var _useParams = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_4__.useParams)(),
     tableId = _useParams.tableId;
   var navigate = (0,react_router_dom__WEBPACK_IMPORTED_MODULE_4__.useNavigate)();
@@ -826,6 +847,9 @@ function Home() {
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     getItems();
   }, []);
+  var lessQuantityItems = items.filter(function (item) {
+    return item.quantity < 15;
+  });
   return !isLoading && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "dashboardBox"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
@@ -840,10 +864,10 @@ function Home() {
     className: "card"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", null, "Average Customers"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", null, avgCustomers))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
     className: "outOfStock"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", null, "Out of Stock"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("ul", null, items.map(function (item) {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", null, "Out of Stock"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("ul", null, lessQuantityItems.map(function (item) {
     return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("li", {
       key: item.id || item._id
-    }, item.ItemName, " ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
+    }, item.ItemName, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
       style: {
         float: 'right'
       }
@@ -913,8 +937,7 @@ var Login = function Login(_ref) {
     _useState12 = _slicedToArray(_useState11, 2),
     error = _useState12[0],
     setError = _useState12[1];
-  var containerRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null); // Declare and initialize containerRef
-
+  var containerRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
   var handleLogin = /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(e) {
       var response, userResponse, _username, _err$response;
@@ -1058,8 +1081,8 @@ var Login = function Login(_ref) {
     value: "",
     disabled: true
   }, "Select user type"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", {
-    value: "admin"
-  }, "Admin"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", {
+    value: "customer"
+  }, "Customer"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("option", {
     value: "user"
   }, "User")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", {
     id: "btn"
@@ -1206,9 +1229,11 @@ __webpack_require__.r(__webpack_exports__);
 
 var Order = function Order() {
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    document.body.style.display = "block";
     var rootElement = document.getElementById("root");
     rootElement.classList.add("rootFullWidth");
     return function () {
+      document.body.style.display = "flex";
       rootElement.classList.remove("rootFullWidth");
     };
   }, []);
@@ -1265,15 +1290,38 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 
 function RestoHome() {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h1", {
-    style: {
-      color: 'black'
-    }
-  }, "Restaurant page"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
-    style: {
-      color: 'black'
-    }
-  }, "Welcome to Restaurant Page"));
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    document.body.style.display = "block";
+    var rootElement = document.getElementById("root");
+    rootElement.classList.add("rootFullWidth");
+    return function () {
+      document.body.style.display = "flex";
+      rootElement.classList.remove("rootFullWidth");
+    };
+  }, []);
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "mainPage"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h1", {
+    className: "titleMainPage"
+  }, "Welcome To Restaurant Management System"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("section", {
+    className: "bannerMainPage"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("img", {
+    src: "/img/bannerMainPage.jpg",
+    alt: "Banner Image"
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "aboutUsSectionContainer"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "aboutUsImage"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("img", {
+    src: "/img/aboutUs.jpg",
+    alt: "aboutUs Image"
+  })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "aboutUsTitleBox"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h1", {
+    className: "aboutUsTitle"
+  }, "About Us"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("p", {
+    className: "textAboutUs"
+  }, "Our restaurant management system is transforming the eating experience by combining dine-in order-taking and inventory management. It streamlines day-to-day operations, allowing restaurant owners to focus on providing exceptional dining experiences. The system provides real-time updates and thorough analytics, which improves efficiency and reduces waste. The dine-in order-taking option allows orders to be processed fast and precisely from the table, reducing errors and guaranteeing that each guest receives exactly what they ordered. The solution improves staff coordination and communication by seamlessly integrating front- and back-of-house procedures. This technique increases the dining room's efficiency, structure, and focus on customer needs."))));
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (RestoHome);
 
@@ -1866,8 +1914,8 @@ function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(
 
 
 
-var LogoutButton = styled_components__WEBPACK_IMPORTED_MODULE_1__["default"].button(_templateObject || (_templateObject = _taggedTemplateLiteral(["\n  margin: 50px 0;\n  background-color: red;\n  color: white;\n  border: none;\n  padding: 10px;\n  cursor: pointer;\n"])));
-var TopNavBarContainer = styled_components__WEBPACK_IMPORTED_MODULE_1__["default"].div(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(["\n  width: 100%;\n  background-color: #333;\n  color: white;\n  display: flex;\n  justify-content: space-around;\n  padding: 10px;\n  align-items: center;\n"])));
+var LogoutButton = styled_components__WEBPACK_IMPORTED_MODULE_1__["default"].button(_templateObject || (_templateObject = _taggedTemplateLiteral(["\n  margin: 0 20px;\n  background-color: red;\n  color: white;\n  border: none;\n  padding: 10px;\n  cursor: pointer;\n"])));
+var TopNavBarContainer = styled_components__WEBPACK_IMPORTED_MODULE_1__["default"].div(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(["\n  width: 100%;\n  background-color: #333;\n  color: white;\n  z-index: 1000;\n  display: flex;\n  top: 0;\n  justify-content: space-around;\n  padding: 10px;\n  position: sticky;\n  align-items: center;\n"])));
 var NavLink = (0,styled_components__WEBPACK_IMPORTED_MODULE_1__["default"])(react_router_dom__WEBPACK_IMPORTED_MODULE_2__.Link)(_templateObject3 || (_templateObject3 = _taggedTemplateLiteral(["\n  color: white;\n  text-decoration: none;\n  font-size: 18px;\n\n  &:hover {\n    text-decoration: underline;\n  }\n"])));
 var TopNavBar = function TopNavBar(_ref) {
   var onLogout = _ref.onLogout;

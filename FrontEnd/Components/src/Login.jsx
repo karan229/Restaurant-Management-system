@@ -93,7 +93,7 @@ const Login = ({ onLogin }) => {
           <input type="password" id="password" placeholder="Enter password" value={password} onChange={(e) => setPassword(e.target.value)} className="form-control" name="password" required />
           <Select value={userType} onChange={(e) => setUserType(e.target.value)} required>
             <option value="" disabled>Select user type</option>
-            <option value="admin">Admin</option>
+            <option value="customer">Customer</option>
             <option value="user">User</option>
           </Select>
           <button id="btn">Register</button>
