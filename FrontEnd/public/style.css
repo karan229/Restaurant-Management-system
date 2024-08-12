@@ -1164,3 +1164,212 @@ td {
   background: #eeeeee;
   padding: 10px;
 }
+.customization-input {
+  width: 100%;
+  max-width: 400px;
+  margin-top: 20px;
+}
+
+.customization-input label {
+  display: block;
+  margin-bottom: 5px;
+  color: #fff;
+  font-weight: bold;
+}
+
+.customization-input textarea {
+  width: 100%;
+  height: 100px;
+  padding: 10px;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  resize: vertical;
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.customization-input textarea::placeholder {
+  color: #ccc;
+}
+
+.customization-input textarea:focus {
+  background-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Admin Inventory Page */
+.admin-inventory {
+  width: 100%;
+  background-color: #4158d0;
+  background-image: linear-gradient(
+    43deg,
+    #4158d0 0%,
+    #c850c0 46%,
+    #ffcc70 100%
+  );
+  padding: 20px;
+  border-radius: 20px;
+  min-height: 80vh;
+}
+
+.category-section,
+.dish-section {
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  background-color: rgba(17, 25, 40, 0.75);
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.125);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.category-section input,
+.dish-section input {
+  margin: 5px 0;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+}
+
+.category-section button,
+.dish-section button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.category-section button:hover,
+.dish-section button:hover {
+  background-color: #0056b3;
+}
+
+.category-section ul,
+.dish-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.category-section li,
+.dish-section li {
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
+  cursor: pointer;
+}
+
+.category-section li:hover,
+.dish-section li:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.category-section img,
+.dish-section img {
+  max-width: 100px;
+  max-height: 100px;
+  border-radius: 10px;
+  margin-top: 5px;
+}
+
+.table-container {
+  overflow-x: auto;
+  margin-top: 20px;
+}
+
+.table-list {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+}
+
+.table-list th,
+.table-list td {
+  padding: 10px;
+  text-align: left;
+}
+
+.table-list th {
+  font-weight: bold;
+}
+
+.table-list .item-img {
+  max-width: 100px;
+  max-height: 100px;
+  object-fit: cover;
+}
+
+.table-list button {
+  margin: 5px;
+  padding: 5px 10px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.table-list button:hover {
+  background-color: #0056b3;
+}
+
+.table-list button:focus {
+  outline: none;
+}
+
+@media (max-width: 768px) {
+  .admin-inventory {
+    padding: 10px;
+  }
+
+  .category-section,
+  .dish-section {
+    padding: 10px;
+  }
+
+  .table-list {
+    font-size: 14px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .table-list,
+  .table-list thead,
+  .table-list tbody,
+  .table-list th,
+  .table-list td,
+  .table-list tr {
+    display: block;
+  }
+
+  .table-list thead tr {
+    display: none;
+  }
+
+  .table-list tr {
+    margin-bottom: 15px;
+  }
+
+  .table-list td {
+    text-align: right;
+    padding-left: 50%;
+    position: relative;
+  }
+
+  .table-list td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 0;
+    width: 50%;
+    padding-left: 10px;
+    font-weight: bold;
+    text-align: left;
+  }
+}
