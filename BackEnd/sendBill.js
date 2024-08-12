@@ -1,9 +1,10 @@
 const nodemailer = require('nodemailer');
 
-const sendBillEmail = async (email, tableId, selectedItems) => {
+const sendBillEmail = async (email, tableId, selectedItems, customization) => {
   const totalAmount = selectedItems
     .reduce((total, item) => total + item.price * item.quantity, 0)
     .toFixed(2);
+    console.log('Customization details received in backend:', customization);
 
   const itemsList = selectedItems
     .map(item => `
@@ -56,6 +57,12 @@ const sendBillEmail = async (email, tableId, selectedItems) => {
           font-weight: bold;
           background-color: #f2f2f2;
         }
+        .customization {
+          margin-top: 20px;
+          padding: 10px;
+          background-color: #f2f2f2;
+          border-radius: 5px;
+        }
       </style>
     </head>
     <body>
@@ -81,6 +88,7 @@ const sendBillEmail = async (email, tableId, selectedItems) => {
             </tr>
           </tfoot>
         </table>
+        ${customization ? `<div class="customization"><strong>Customizations:</strong> ${customization}</div>` : ''}
         <p>Thank you for dining with us!</p>
       </div>
     </body>

@@ -13,8 +13,9 @@ console.log('MongoDB Connection String:', process.env.STRING);
 
 const app = express();
 app.use(cors());
-app.use(bodyParser.json());
-app.use(express.json());
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(express.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
 const dbConnectionString = process.env.STRING;
 const JWT_SECRET = process.env.JWT_SECRET || 'BhuimiiiiiiiiiiKaaaaaaaa';
@@ -50,6 +51,121 @@ const itemsSchema = new mongoose.Schema({
 
 const Items = mongoose.model('items', itemsSchema);
 const User = mongoose.model('User', userSchema);
+
+const categorySchema = new mongoose.Schema({
+  name: { type: String, required: true, unique: true },
+  dishes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Dish' }]
+});
+
+const dishSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  price: { type: Number, required: true },
+  categoryId: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true }
+});
+
+const Category = mongoose.model('Category', categorySchema);
+const Dish = mongoose.model('Dish', dishSchema);
+
+app.get('/api/menu', async (req, res) => {
+  try {
+    const categories = await Category.find().populate('dishes');
+    res.status(200).json(categories);
+  } catch (error) {
+    console.error('Error fetching categories:', error);
+    res.status(500).json({ message: 'Error fetching categories', error });
+  }
+});
+
+
+app.post('/api/category', async (req, res) => {
+  try {
+    const newCategory = new Category({
+      name: req.body.name
+    });
+
+    await newCategory.save();
+    res.status(201).json(newCategory);
+  } catch (error) {
+    console.error('Error creating category:', error);
+    res.status(500).json({ message: 'Error creating category', error });
+  }
+});
+
+
+app.put('/api/category/:id', async (req, res) => {
+  try {
+    const updateData = {
+      name: req.body.name
+    };
+
+    const updatedCategory = await Category.findByIdAndUpdate(req.params.id, updateData, { new: true });
+    if (!updatedCategory) {
+      return res.status(404).json({ message: 'Category not found' });
+    }
+
+    res.status(200).json(updatedCategory);
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating category', error });
+  }
+});
+
+app.delete('/api/category/:id', async (req, res) => {
+  try {
+    const deletedCategory = await Category.findByIdAndDelete(req.params.id);
+    if (!deletedCategory) {
+      return res.status(404).json({ message: 'Category not found' });
+    }
+    res.status(200).json({ message: 'Category deleted successfully', deletedCategory });
+  } catch (error) {
+    res.status(500).json({ message: 'Error deleting category', error });
+  }
+});
+
+app.post('/api/dish', async (req, res) => {
+  try {
+    const newDish = new Dish(req.body);
+    await newDish.save();
+    await Category.findByIdAndUpdate(req.body.categoryId, {
+      $push: { dishes: newDish._id },
+    });
+    res.status(201).json(newDish);
+  } catch (error) {
+    console.error('Error creating dish:', error);
+    res.status(500).json({ message: 'Error creating dish', error });
+  }
+});
+
+
+app.put('/api/dish/:id', async (req, res) => {
+  try {
+    const updateData = {
+      name: req.body.name,
+      price: req.body.price
+    };
+
+    const updatedDish = await Dish.findByIdAndUpdate(req.params.id, updateData, { new: true });
+    if (!updatedDish) {
+      return res.status(404).json({ message: 'Dish not found' });
+    }
+
+    res.status(200).json(updatedDish);
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating dish', error });
+  }
+});
+
+app.delete('/api/dish/:id', async (req, res) => {
+  try {
+    const deletedDish = await Dish.findByIdAndDelete(req.params.id);
+    if (!deletedDish) {
+      return res.status(404).json({ message: 'Dish not found' });
+    }
+    res.status(200).json({ message: 'Dish deleted successfully', deletedDish });
+  } catch (error) {
+    res.status(500).json({ message: 'Error deleting dish', error });
+  }
+});
+
 
 app.get('/', (req, res) => {
   res.send('API IS WORKING!');
@@ -287,10 +403,10 @@ app.get('/inventory', authenticateToken, authenticateAdmin, async (req, res) => 
 
 // New endpoint for sending bill email
 app.post('/api/send-bill', async (req, res) => {
-  const { email, tableId, selectedItems } = req.body;
+  const { email, tableId, selectedItems, customization } = req.body;
 
   try {
-    await sendBillEmail(email, tableId, selectedItems);
+    await sendBillEmail(email, tableId, selectedItems, customization);
     res.status(200).json({ message: 'Bill sent successfully' });
   } catch (error) {
     console.error('Error sending bill:', error);

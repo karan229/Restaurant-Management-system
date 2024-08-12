@@ -14,7 +14,7 @@ import Dining from './src/Dining/Dining.jsx';
 import Menu from './src/Dining/Menu.jsx';
 import CheckoutPage from './src/Dining/Checkout.jsx';
 import ConfirmationPage from './src/Dining/Confirm.jsx';
-
+import AdminInventory from './src/Dining/AdminInventoryPage.jsx'
 
 const NotFound = () => <h1 style={{ color: 'black' }}>404! Page Not Found</h1>;
 
@@ -104,6 +104,7 @@ export default function App() {
           <ContentContainer>
             <Routes>
               <Route path="/" element={<RestoHome onLogout={handleLogout} />} />
+              <Route path="/AdminInventory" element={<AdminInventory />} />
               <Route path="/Profile" element={<Admin />} />
               <Route path="/Stock" element={<Stock />} />
               <Route path="/Order" element={<Order />} />
@@ -129,7 +130,7 @@ export default function App() {
 
 const ConditionalNavBar = ({ onLogout }) => {
   const location = useLocation();
-  const showNavBar = ['/Inventory', '/Stock', '/Profile'].includes(location.pathname);
+  const showNavBar = ['/Inventory', '/Stock', '/Profile', '/AdminInventory'].includes(location.pathname);
   const showTopNavBar = location.pathname === '/';
   const showRestoNavbar = location.pathname.startsWith('/Order') || 
                           location.pathname.startsWith('/dining') || 
