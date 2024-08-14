@@ -30,7 +30,7 @@ const OnlineOrder = () => {
 
   useEffect(() => {
     const storedCartItems = localStorage.getItem("cart");
-    if(storedCartItems){
+    if (storedCartItems) {
       setSelectedItems(JSON.parse(storedCartItems));
     }
     fetchMenu();
@@ -38,7 +38,7 @@ const OnlineOrder = () => {
 
   const handleCartButton = (dish) => {
     const itemData = selectedItems[dish._id];
-    if(itemData && itemData.quantity > 0){
+    if (itemData && itemData.quantity > 0) {
       const itemsUpdate = {
         ...selectedItems,
         [dish._id]: {
@@ -48,9 +48,8 @@ const OnlineOrder = () => {
       };
       setSelectedItems(itemsUpdate);
       localStorage.setItem("cart", JSON.stringify(itemsUpdate));
-    }
-    else{
-      alert("Quantity has to be more than zero.")
+    } else {
+      alert("Quantity has to be more than zero.");
     }
   };
 
@@ -67,13 +66,14 @@ const OnlineOrder = () => {
     });
   };
 
-const viewCart = () => {
-  navigate("/order-cart")
-}
-  
+  const viewCart = () => {
+    navigate("/order-cart");
+  };
+
   return (
     <div style={{ marginTop: "50px" }}>
-      <Button style={{ marginTop: "80px" }}
+      <Button
+        style={{ marginTop: "80px" }}
         color="secondary"
         onClick={viewCart}
         variant="contained"
@@ -162,9 +162,12 @@ const viewCart = () => {
                 sx={{ marginTop: "10px" }}
               >
                 <Button
-                  variant="contained"
+                  style={{
+                    background:
+                      "linear-gradient(45deg, #ff6b6b, #f06595, #cc5de8)",
+                    color: "white", // To ensure the text color is visible
+                  }}
                   onClick={() => handleCartButton(dish)}
-                  color="primary"
                 >
                   Add to Cart
                 </Button>

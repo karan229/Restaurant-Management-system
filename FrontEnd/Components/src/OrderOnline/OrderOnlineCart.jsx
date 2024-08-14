@@ -37,8 +37,8 @@ const OrderOnlineCart = () => {
   }, [cart]);
 
   const handleCheckoutForm = () => {
-    if (!cart) {
-      navigate("/order-checkout");
+    if (Object.keys(cart).length > 0) {
+      navigate("/order-checkout", { state: { cart, totalAmount } });
     } else {
       alert(
         "There's no item added in cart. To proceed please add items in cart."
@@ -114,10 +114,6 @@ const OrderOnlineCart = () => {
                   Price for {dish.quantity} Quantity: $
                   {dish.price * dish.quantity || 0}
                 </Typography>
-
-                {/* <Typography variant="body1" sx={{ color: "black" }}>
-                  Quantity: {dish.quantity}
-                </Typography> */}
               </Grid>
               <div style={{ textAlign: "center" }}>
                 <Button
@@ -147,8 +143,15 @@ const OrderOnlineCart = () => {
         Total Order Amount: ${totalDisplay}
       </Typography>
 
-      <div className="btnCheckout">
-        <button className="CheckoutBtn" onClick={handleCheckoutForm}>
+      <div className="btnCheckout" style={{justifyContent: 'center', marginTop: '10px'}}>
+        <button
+          style={{
+            background: "linear-gradient(45deg, #ff6b6b, #f06595, #cc5de8)",
+            color: "white", // To ensure the text color is visible
+          }}
+          className="CheckoutBtn"
+          onClick={handleCheckoutForm}
+        >
           Checkout Form
         </button>
       </div>

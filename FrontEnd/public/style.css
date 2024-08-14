@@ -965,8 +965,6 @@ td {
   transform: scale(1.05);
 }
 
-
-
 /* Checkout Page Styles */
 .checkout-container {
   background-color: #4158d0;
@@ -1081,26 +1079,26 @@ td {
   color: #fff;
 }
 
-.titleMainPage{
+.titleMainPage {
   text-align: center;
   padding: 15px;
   font-size: 2.5rem;
   color: black;
 }
 
-.bannerMainPage img{
+.bannerMainPage img {
   width: 100%;
   height: auto;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.bannerMainPage{
+.bannerMainPage {
   width: 100%;
   margin: 20px auto;
 }
 
-.aboutUsTitle{
+.aboutUsTitle {
   margin: 20px;
   text-align: center;
   font-size: 2rem;
@@ -1109,7 +1107,7 @@ td {
 
 @media (max-width: 768px) {
   .bannerMainPage {
-      width: 90%;
+    width: 90%;
   }
 }
 
@@ -1138,7 +1136,7 @@ td {
 }
 
 .title {
-  color: #4158D0;
+  color: #4158d0;
   font-size: 36px;
 }
 
@@ -1159,8 +1157,7 @@ td {
   }
 }
 
-
-.mainPage{
+.mainPage {
   background: #eeeeee;
   padding: 10px;
 }
@@ -1372,4 +1369,15 @@ td {
     font-weight: bold;
     text-align: left;
   }
+}
+
+.formBox {
+  background-color: #4158d0;
+  background-image: linear-gradient(
+    43deg,
+    #4158d0 0%,
+    #c850c0 46%,
+    #ffcc70 100%
+  );
+  padding: 20px;
 }

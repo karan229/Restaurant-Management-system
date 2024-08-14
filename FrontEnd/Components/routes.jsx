@@ -17,6 +17,7 @@ import ConfirmationPage from './src/Dining/Confirm.jsx';
 import OnlineOrder from './src/OrderOnline/OnlineOrder.jsx';
 import AdminInventory from './src/Dining/AdminInventoryPage.jsx'
 import OrderOnlineCart from './src/OrderOnline/OrderOnlineCart.jsx';
+import OrderOnlineCheckout from './src/OrderOnline/OrderOnlineCheckout.jsx';
 
 const NotFound = () => <h1 style={{ color: 'black' }}>404! Page Not Found</h1>;
 
@@ -120,6 +121,8 @@ export default function App() {
               <Route path="/login" element={<Navigate to="/" />} />
               <Route path="/order-online" element={ userType === 'customer' ? <OnlineOrder />:<Navigate to="/" />} />
               <Route path="/order-cart" element={ userType === 'customer' ? <OrderOnlineCart />:<Navigate to="/" />} />
+              <Route path="/order-checkout" element={ userType === 'customer' ? <OrderOnlineCheckout/>:<Navigate to="/" />} />
+              <Route path="/order-payment" element={ userType === 'customer' ? <OrderOnlinePayment />:<Navigate to="/" />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </ContentContainer>
