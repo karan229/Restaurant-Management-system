@@ -33,28 +33,24 @@ const Login = ({ onLogin }) => {
         email,
         password,
       });
-  
-      console.log('Login Response:', response.data);
-  
+
       localStorage.setItem('userType', response.data.userType);
       localStorage.setItem('userEmail', response.data.email);
       localStorage.setItem('isLoggedIn', 'true');
-  
+
       const userResponse = await axios.get(`http://localhost:8000/user/${email}`);
       const username = userResponse.data.username;
-  
+
       alert(`Welcome Back ${username}`);
-  
+
       setMessage(response.data.message);
       setError(false);
-      onLogin(response.data.token);
+      onLogin(response.data.token, response.data.userType);
     } catch (err) {
-      console.error('Login Error:', err.response?.data || err.message);
       setMessage(err.response?.data?.message || 'An error occurred');
       setError(true);
     }
   };
-  
 
   const handleRegister = async (e) => {
     e.preventDefault();

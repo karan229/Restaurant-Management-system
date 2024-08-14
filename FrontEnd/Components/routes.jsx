@@ -14,6 +14,7 @@ import Dining from './src/Dining/Dining.jsx';
 import Menu from './src/Dining/Menu.jsx';
 import CheckoutPage from './src/Dining/Checkout.jsx';
 import ConfirmationPage from './src/Dining/Confirm.jsx';
+import OnlineOrder from './src/OrderOnline/OnlineOrder.jsx';
 import AdminInventory from './src/Dining/AdminInventoryPage.jsx'
 
 const NotFound = () => <h1 style={{ color: 'black' }}>404! Page Not Found</h1>;
@@ -33,20 +34,21 @@ export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userType, setUserType] = useState('');
 
-  useEffect(() => {
-    const checkLoginStatus = () => {
-      const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
-      if (loggedIn) {
+  const checkLoginStatus = () => {
+    const loggedIn = localStorage.getItem('isLoggedIn') === 'true';
+    if (loggedIn) {
+      const storedUserType = localStorage.getItem('userType');
+      if (storedUserType) {
         setIsLoggedIn(true);
-        setUserType(localStorage.getItem('userType') || '');
-      } else {
-        setIsLoggedIn(false);
-        setUserType('');
-      }
-    };
+        setUserType(storedUserType);
+    } else {
+      setIsLoggedIn(false);
+      setUserType('');
+    }
+  }};
 
+  useEffect(() => {
     checkLoginStatus();
-
     const token = localStorage.getItem('token');
     if (token) {
       verifyToken(token);
@@ -64,6 +66,7 @@ export default function App() {
         if (data.message === 'Secure connection') {
           setIsLoggedIn(true);
           setUserType(data.user.userType);
+          localStorage.setItem('userType', data.user.userType)
         } else {
           setIsLoggedIn(false);
           clearAuthData();
@@ -103,9 +106,10 @@ export default function App() {
           <ConditionalNavBar onLogout={handleLogout} />
           <ContentContainer>
             <Routes>
-              <Route path="/" element={<RestoHome onLogout={handleLogout} />} />
-              <Route path="/AdminInventory" element={<AdminInventory />} />
+              <Route path="/" element={userType==='customer' ? <OnlineOrder /> : <RestoHome onLogout={handleLogout} />} />
               <Route path="/Profile" element={<Admin />} />
+              
+              <Route path="/AdminInventory" element={<AdminInventory />} />
               <Route path="/Stock" element={<Stock />} />
               <Route path="/Order" element={<Order />} />
               <Route path="/Inventory" element={userType === 'admin' ? <Home /> : <Navigate to="/" />} />
@@ -114,6 +118,7 @@ export default function App() {
               <Route path="/checkout" element={<CheckoutPage />} />
               <Route path="/confirmation" element={<ConfirmationPage />} />
               <Route path="/login" element={<Navigate to="/" />} />
+              <Route path="/order-online" element={ userType === 'customer' ? <OnlineOrder />:<Navigate to="/" />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </ContentContainer>
