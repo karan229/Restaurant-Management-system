@@ -32,7 +32,37 @@ mongoose.connect(dbConnectionString, { useNewUrlParser: true, useUnifiedTopology
     console.error('Error connecting to the database:', error.message);
     process.exit(1);
   });
+const orderSchema = new mongoose.Schema({
+  tableId: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+  },
+  selectedItems: [
+    {
+      name: String,
+      quantity: Number,
+      price: Number,
+    },
+  ],
+  customization: {
+    type: String,
+    default: '',
+  },
+  status: {
+    type: String,
+    default: 'Preparing',
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+});
 
+const Order = mongoose.model('Order', orderSchema);
 const userSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
@@ -301,7 +331,7 @@ app.post('/api/upload', upload.single('image'), async (req, res) => {
       quantity: req.body.quantity,
       Price: req.body.Price,
       Available: req.body.Available,
-      image: req.file.buffer, 
+      image: req.file.buffer,
       imageType: req.file.mimetype,
     });
 
@@ -406,6 +436,13 @@ app.post('/api/send-bill', async (req, res) => {
   const { email, tableId, selectedItems, customization } = req.body;
 
   try {
+    const newOrder = new Order({
+      email,
+      tableId,
+      selectedItems,
+      customization,
+    });
+    await newOrder.save();
     await sendBillEmail(email, tableId, selectedItems, customization);
     res.status(200).json({ message: 'Bill sent successfully' });
   } catch (error) {
