@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Grid, Typography, Button } from "@mui/material";
+import { json, useNavigate } from "react-router-dom";
 
 const OnlineOrder = () => {
   useEffect(() => {
@@ -14,6 +15,7 @@ const OnlineOrder = () => {
 
   const [menuList, setMenuList] = useState([]);
   const [selectedItems, setSelectedItems] = useState({});
+  const navigate = useNavigate();
 
   const fetchMenu = async () => {
     try {
@@ -27,21 +29,58 @@ const OnlineOrder = () => {
   };
 
   useEffect(() => {
+    const storedCartItems = localStorage.getItem("cart");
+    if(storedCartItems){
+      setSelectedItems(JSON.parse(storedCartItems));
+    }
     fetchMenu();
   }, []);
 
-const handleQuantityChange = (idDish, onChange) => {
+  const handleCartButton = (dish) => {
+    const itemData = selectedItems[dish._id];
+    if(itemData && itemData.quantity > 0){
+      const itemsUpdate = {
+        ...selectedItems,
+        [dish._id]: {
+          ...dish,
+          quantity: selectedItems[dish._id]?.quantity || 0,
+        },
+      };
+      setSelectedItems(itemsUpdate);
+      localStorage.setItem("cart", JSON.stringify(itemsUpdate));
+    }
+    else{
+      alert("Quantity has to be more than zero.")
+    }
+  };
+
+  const handleQuantityChange = (idDish, changeQty) => {
     setSelectedItems((prev) => {
-      const newQuantity = (prev[idDish] || 0) + onChange;
+      const currItem = prev[idDish] || { quantity: 0 };
+      const qtyNew = Math.max(currItem.quantity + changeQty, 0);
+      const updatedItem = { ...currItem, quantity: qtyNew };
+
       return {
         ...prev,
-        [idDish]: Math.max(newQuantity, 0)
+        [idDish]: updatedItem,
       };
     });
   };
 
+const viewCart = () => {
+  navigate("/order-cart")
+}
+  
   return (
     <div style={{ marginTop: "50px" }}>
+      <Button style={{ marginTop: "80px" }}
+        color="secondary"
+        onClick={viewCart}
+        variant="contained"
+        sx={{ position: "fixed", top: "10px", right: "10px" }}
+      >
+        View Cart
+      </Button>
       <Grid container justifyContent={"center"} rowGap={2} columnGap={2}>
         {menuList.length > 0 ? (
           menuList.map((dish, i) => (
@@ -51,16 +90,16 @@ const handleQuantityChange = (idDish, onChange) => {
               xs={12}
               sm={6}
               md={4}
-              lg={2.5} // Adjusted to fit more content on larger screens
+              lg={2.5}
               sx={{
                 border: "1px solid black",
                 padding: "10px",
                 borderRadius: "8px",
                 background: "white",
                 boxShadow: 3,
-                overflow: "hidden", 
-                height: "auto", // Adjust this value to control the height
-                maxHeight: "400px", // Cap the maximum height
+                overflow: "hidden",
+                height: "auto",
+                maxHeight: "400px",
               }}
             >
               <Grid
@@ -72,39 +111,61 @@ const handleQuantityChange = (idDish, onChange) => {
                 <img
                   src="https://picsum.photos/200/300"
                   alt={dish.name}
-                  style={{ width: "100%", height: "200px", objectFit: "cover" }} // Adjust height and objectFit for responsiveness
+                  style={{ width: "100%", height: "200px", objectFit: "cover" }}
                 />
               </Grid>
               <Grid item sx={{ textAlign: "center", marginTop: "10px" }}>
-                <Typography variant="h6" sx={{ color: "black", marginBottom: "8px" }}>
+                <Typography
+                  variant="h6"
+                  sx={{ color: "black", marginBottom: "8px" }}
+                >
                   {dish.name}
                 </Typography>
                 <Typography variant="body1" sx={{ color: "black" }}>
-                  {dish.price}$
+                  Price: {dish.price}$
                 </Typography>
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginTop: '10px' }}>
-                <Button
-                  onClick={() => handleQuantityChange(dish._id, -1)}
-                  variant="outlined"
-                  sx={{ margin: '0 5px' }}
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    marginTop: "10px",
+                  }}
                 >
-                  -
-                </Button>
-                <Typography variant="body1" sx={{ color: 'black', margin: '0 10px' }}>
-                  {selectedItems[dish._id] || 0}
-                </Typography>
-                <Button
-                  onClick={() => handleQuantityChange(dish._id, 1)}
-                  variant="outlined"
-                  sx={{ margin: '0 5px' }}
-                >
-                  +
-                </Button>
-              </div>
+                  <Button
+                    onClick={() => handleQuantityChange(dish._id, -1)}
+                    variant="outlined"
+                    sx={{ margin: "0 5px" }}
+                  >
+                    -
+                  </Button>
+                  <Typography
+                    variant="body1"
+                    sx={{ color: "black", margin: "0 10px" }}
+                  >
+                    {selectedItems[dish._id]?.quantity || 0}
+                  </Typography>
+                  <Button
+                    onClick={() => handleQuantityChange(dish._id, 1)}
+                    variant="outlined"
+                    sx={{ margin: "0 5px" }}
+                  >
+                    +
+                  </Button>
+                </div>
               </Grid>
 
-              <Grid container item justifyContent="center" sx={{ marginTop: "10px" }}>
-                <Button variant="contained" color="primary">
+              <Grid
+                container
+                item
+                justifyContent="center"
+                sx={{ marginTop: "10px" }}
+              >
+                <Button
+                  variant="contained"
+                  onClick={() => handleCartButton(dish)}
+                  color="primary"
+                >
                   Add to Cart
                 </Button>
               </Grid>
