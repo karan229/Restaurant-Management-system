@@ -16,6 +16,9 @@ import CheckoutPage from './src/Dining/Checkout.jsx';
 import ConfirmationPage from './src/Dining/Confirm.jsx';
 import OnlineOrder from './src/OrderOnline/OnlineOrder.jsx';
 import AdminInventory from './src/Dining/AdminInventoryPage.jsx'
+import OrderOnlineCart from './src/OrderOnline/OrderOnlineCart.jsx';
+import OrderOnlineCheckout from './src/OrderOnline/OrderOnlineCheckout.jsx';
+import RecipePage from "./src/Dining/Recipe.jsx";
 
 const NotFound = () => <h1 style={{ color: 'black' }}>404! Page Not Found</h1>;
 
@@ -107,8 +110,7 @@ export default function App() {
           <ContentContainer>
             <Routes>
               <Route path="/" element={userType==='customer' ? <OnlineOrder /> : <RestoHome onLogout={handleLogout} />} />
-              <Route path="/Profile" element={<Admin />} />
-              
+              <Route path="/Profile" element={<Admin />} />           
               <Route path="/AdminInventory" element={<AdminInventory />} />
               <Route path="/Stock" element={<Stock />} />
               <Route path="/Order" element={<Order />} />
@@ -119,6 +121,10 @@ export default function App() {
               <Route path="/confirmation" element={<ConfirmationPage />} />
               <Route path="/login" element={<Navigate to="/" />} />
               <Route path="/order-online" element={ userType === 'customer' ? <OnlineOrder />:<Navigate to="/" />} />
+              <Route path="/order-cart" element={ userType === 'customer' ? <OrderOnlineCart />:<Navigate to="/" />} />
+              <Route path="/order-checkout" element={ userType === 'customer' ? <OrderOnlineCheckout/>:<Navigate to="/" />} />
+              <Route path="/order-payment" element={ userType === 'customer' ? <OrderOnlinePayment />:<Navigate to="/" />} />
+              <Route path="/Recipe" element={<RecipePage/>} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </ContentContainer>

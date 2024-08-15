@@ -1106,7 +1106,7 @@ td {
 
 @media (max-width: 768px) {
   .bannerMainPage {
-      width: 90%;
+    width: 90%;
   }
 }
 
@@ -1135,7 +1135,7 @@ td {
 }
 
 .title {
-  color: #4158D0;
+  color: #4158d0;
   font-size: 36px;
 }
 
@@ -1371,3 +1371,100 @@ td {
     text-align: left;
   }
 }
+
+.formBox {
+  background-color: #4158d0;
+  background-image: linear-gradient(
+    43deg,
+    #4158d0 0%,
+    #c850c0 46%,
+    #ffcc70 100%
+  );
+  padding: 20px;
+}
+
+
+/* recipe page */
+.page {
+  display: flex;
+  flex-direction: row;
+  padding: 20px;
+  gap: 100px;
+  color: black;
+  height: 80vh;
+}
+
+.sidebar {
+  flex: 1;
+  margin-right: 20px;
+  color: black;
+  height: 80vh;
+  width: 50vw;
+  overflow: scroll;
+}
+
+.content {
+  flex: 2;
+  width: 250px;
+}
+
+.recipe-list {
+  list-style-type: none;
+  padding: 0;
+  color: black;
+}
+
+.recipe-item {
+  padding: 10px;
+  border: 1px solid black;
+  margin-bottom: 10px;
+  color: black;
+}
+
+.recipe-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  text-align: left;
+  width: 100%;
+  color: black;
+}
+
+
+.video-container {
+  position: relative;
+  padding-bottom: 56.25%; 
+  height: 0;
+  overflow: hidden;
+  max-width: 100%;
+  background: #000;
+}
+
+.video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+@media (max-width: 768px) {
+  .page {
+      color: black;
+      flex-direction: column;
+  }
+
+  .sidebar {
+      color: black;
+      margin-right: 0;
+      margin-bottom: 20px;
+      width: 100%;
+  }
+
+  .content {
+      flex: 1;
+      color: black;
+  }
+}
+
