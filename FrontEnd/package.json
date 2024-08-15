@@ -2,14 +2,13 @@
   "name": "restaurant_management_system",
   "version": "1.0.0",
   "description": "",
-  "main": "server.js",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "compile": "webpack --mode development",
     "watch": "webpack -w --config Webpack.config.js",
-    "start": "nodemon server.js"
+    "start": "nodemon index.js"
   },
-  "proxy": "https://restaurant-management-system-jpbc.onrender.com",
   "author": "",
   "license": "ISC",
   "dependencies": {
