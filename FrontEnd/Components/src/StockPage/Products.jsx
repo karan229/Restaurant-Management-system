@@ -19,7 +19,7 @@ const UploadForm = () => {
     formData.append('image', image);
 
     try {
-      await axios.post('http://localhost:8000/api/upload', formData, {
+      await axios.post('https://restaurant-management-system-jpbc.onrender.com/api/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
