@@ -18,6 +18,8 @@ import OnlineOrder from './src/OrderOnline/OnlineOrder.jsx';
 import AdminInventory from './src/Dining/AdminInventoryPage.jsx'
 import OrderOnlineCart from './src/OrderOnline/OrderOnlineCart.jsx';
 import OrderOnlineCheckout from './src/OrderOnline/OrderOnlineCheckout.jsx';
+import OrderOnlinePayment from './src/OrderOnline/OrderOnlinePayment.jsx';
+import OrderOnlineNavbar from './src/OrderOnline/OnlineOrderNavbar.jsx';
 
 const NotFound = () => <h1 style={{ color: 'black' }}>404! Page Not Found</h1>;
 
@@ -105,7 +107,7 @@ export default function App() {
     <Router>
       {isLoggedIn ? (
         <>
-          <ConditionalNavBar onLogout={handleLogout} />
+          <ConditionalNavBar onLogout={handleLogout} userType={userType}/>
           <ContentContainer>
             <Routes>
               <Route path="/" element={userType==='customer' ? <OnlineOrder /> : <RestoHome onLogout={handleLogout} />} />
@@ -137,10 +139,16 @@ export default function App() {
   );
 }
 
-const ConditionalNavBar = ({ onLogout }) => {
+const ConditionalNavBar = ({ onLogout, userType }) => {
   const location = useLocation();
+  
   const showNavBar = ['/Inventory', '/Stock', '/Profile', '/AdminInventory'].includes(location.pathname);
-  const showTopNavBar = location.pathname === '/';
+  
+  const showTopNavBar = location.pathname === '/' && userType !== 'customer';
+
+  const showOnlineNav = userType === 'customer';
+
+
   const showRestoNavbar = location.pathname.startsWith('/Order') || 
                           location.pathname.startsWith('/dining') || 
                           location.pathname.startsWith('/menu') || 
@@ -148,9 +156,10 @@ const ConditionalNavBar = ({ onLogout }) => {
 
   return (
     <>
-      {showTopNavBar && <TopNavBar onLogout={onLogout} />}
+      {showTopNavBar &&<TopNavBar onLogout={onLogout} />}
       {showNavBar && <NavBar onLogout={onLogout} />}
       {showRestoNavbar && <RestoNavbar />}
+      {showOnlineNav && userType === 'customer' && <OrderOnlineNavbar/>}
     </>
   );
 };
