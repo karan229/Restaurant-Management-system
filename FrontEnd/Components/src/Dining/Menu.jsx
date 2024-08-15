@@ -20,7 +20,7 @@ const MenuPage = () => {
   useEffect(() => {
     const fetchMenu = async () => {
       try {
-        const response = await fetch('http://localhost:8000/api/menu');
+        const response = await fetch('https://restaurant-management-system-jpbc.onrender.com/api/menu');
         if (!response.ok) throw new Error('Network response was not ok');
         
         const data = await response.json();
