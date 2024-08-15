@@ -96,6 +96,7 @@ const NavBar = ({ onLogout }) => {
         <NavLink to="/Profile" onClick={handleToggle}>Admin</NavLink>
         <NavLink to="/AdminInventory" onClick={handleToggle}>Menu</NavLink>
         <NavLink to="/Recipe" onClick={handleToggle}>Recipe</NavLink>
+        <NavLink to="/ManageOrder" onClick={handleToggle}>Manage Order</NavLink>
         <LogoutButton onClick={handleLogout}>Logout</LogoutButton>
       </NavBarContainer>
     </>

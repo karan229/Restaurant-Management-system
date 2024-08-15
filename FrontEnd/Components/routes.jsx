@@ -21,6 +21,7 @@ import OrderOnlineCheckout from './src/OrderOnline/OrderOnlineCheckout.jsx';
 import OrderOnlinePayment from './src/OrderOnline/OrderOnlinePayment.jsx';
 import OrderOnlineNavbar from './src/OrderOnline/OnlineOrderNavbar.jsx';
 import RecipePage from "./src/Dining/Recipe.jsx";
+import ManageOrder from './src/ManageOrder.jsx';
 
 const NotFound = () => <h1 style={{ color: 'black' }}>404! Page Not Found</h1>;
 
@@ -127,6 +128,7 @@ export default function App() {
               <Route path="/order-checkout" element={ userType === 'customer' ? <OrderOnlineCheckout/>:<Navigate to="/" />} />
               <Route path="/order-payment" element={ userType === 'customer' ? <OrderOnlinePayment />:<Navigate to="/" />} />
               <Route path="/Recipe" element={<RecipePage/>} />
+              <Route path="/ManageOrder" element = {<ManageOrder/>}/>
               <Route path="*" element={<NotFound />} />
             </Routes>
           </ContentContainer>
