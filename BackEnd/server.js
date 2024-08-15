@@ -579,3 +579,53 @@ const port = process.env.PORT || 8000;
 app.listen(port, () => {
   console.log("My App is running on this port:", port);
 });
+
+// MANAGE ORDERS API 
+// API to fetch all orders
+app.get('/api/orders', async (req, res) => {
+  try {
+    const orders = await OnlineOrder.find();
+    res.status(200).json(orders);
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching orders', error });
+  }
+});
+
+// API to fetch a specific order by ID
+app.get('/api/orders/:id', async (req, res) => {
+  try {
+    const order = await OnlineOrder.findById(req.params.id);
+    if (order) {
+      res.status(200).json(order);
+    } else {
+      res.status(404).json({ message: 'Order not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching order', error });
+  }
+});
+
+// API to update order status
+app.put('/api/orders/:id/status', async (req, res) => {
+  try {
+    const { status } = req.body;
+
+    if (!status) {
+      return res.status(400).json({ message: 'Status is required' });
+    }
+
+    const order = await OnlineOrder.findByIdAndUpdate(
+      req.params.id,
+      { status },
+      { new: true }
+    );
+
+    if (order) {
+      res.status(200).json(order);
+    } else {
+      res.status(404).json({ message: 'Order not found' });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating order status', error });
+  }
+});
