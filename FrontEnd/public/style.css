@@ -1776,3 +1776,96 @@ td {
     color: black;
   }
 }
+
+
+/* Manage Order CSS */
+.table-container {
+  width: 100%;
+  padding: 20px;
+  overflow-x: auto;
+  color: black;
+  margin-left: 100px;
+}
+
+.responsive-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.responsive-table th {
+  background-color: #f4f4f4;
+  color: #333;
+}
+
+.responsive-table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.responsive-table tr:nth-child(odd) {
+  background-color: #ffffff;
+}
+
+
+.responsive-table th, .responsive-table td {
+  padding: 12px;
+  border: 1px solid #ddd;
+  text-align: left;
+  font-size: 14px;
+  word-wrap: break-word; 
+}
+
+.responsive-table th {
+  background-color: #f4f4f4;
+}
+
+.responsive-table select {
+  padding: 6px;
+  font-size: 14px;
+}
+
+
+/* Responsive Styles */
+@media screen and (max-width: 768px) {
+  .table-container {
+    margin-left: 0px;
+    overflow-x: scroll;
+    margin-top: 200px;
+  }
+
+  .responsive-table thead {
+    display: none;
+  }
+
+  .responsive-table tr {
+    display: block;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+  }
+
+  .responsive-table td {
+    display: block;
+    text-align: right;
+    font-size: 13px;
+    border: none;
+    position: relative;
+    padding-left: 50%;
+    word-wrap: break-word; 
+    white-space: normal; 
+  }
+
+  .responsive-table td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 0;
+    width: 45%;
+    padding-left: 10px;
+    font-weight: bold;
+    text-align: left;
+    white-space: nowrap; 
+  }
+
+  .responsive-table button {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
