@@ -1,11 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Typography, Grid, TextField, Button } from "@mui/material";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
 
 const OrderOnlineCheckout = () => {
   useEffect(() => {
@@ -56,122 +50,106 @@ const OrderOnlineCheckout = () => {
   const totalDisplay = typeof totalAmount === "number" && !isNaN(totalAmount) ? totalAmount.toFixed(2) : "0.00";
 
   return (
-    <div style={{ marginTop: "15px" }}>
-      <Typography
-        sx={{ marginBottom: "10px", textAlign: "center", color: "black" }}
-        variant="h3"
-      >
+    <div className="onlineOrderMenuBox" style={{flexDirection: 'column', marginTop: 0}}>
+      <h3 className="cartHeading">
         Enter Your Details
-      </Typography>
+      </h3>
 
-      <form onSubmit={submitForm} className="formBox">
-        <Grid container sx={{ marginBottom: "20px" }} spacing={2}>
-          <Grid item xs={12}>
-            <TextField
-              label="Name"
-              fullWidth
+      <form onSubmit={submitForm} id="formBox" className="formBox">
+        <div className="checkoutForm">
+          <label className="formBoxLabel" htmlFor="fullname">Name</label>
+            <input
+            type="text"
+              id="fullname"
+              className="inputFields"
               name="fullname"
               required
               value={dataForm.fullname}
-              variant="outlined"
               onChange={inputChange}
             />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
+          </div>
+          <div className="checkoutForm">
+            <label className="formBoxLabel" htmlFor="emailAddress">Email Id</label>
+            <input
               type="email"
-              fullWidth
               name="emailAddress"
-              label="Email"
+              id="emailAddress"
+              className="inputFields"
               required
               value={dataForm.emailAddress}
-              variant="outlined"
               onChange={inputChange}
             />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
+          </div>
+          <div className="checkoutForm">
+            <label className="formBoxLabel" htmlFor="contact">Contact Number</label>
+            <input
               type="tel"
-              fullWidth
               required
               name="contact"
-              variant="outlined"
+              className="inputFields"
+              id="contact"
               value={dataForm.contact}
-              label="Phone Number"
               onChange={inputChange}
             />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              label="Delivery Address"
-              fullWidth
-              multiline
+          </div>
+          <div className="checkoutForm">
+            <label className="formBoxLabel" htmlFor="address">Address for Delivery</label>
+            <textarea
               name="address"
-              variant="outlined"
+              id="address"
+              className="textareaField"
               required
               value={dataForm.address}
               onChange={inputChange}
-              rows={4}
+              rows="4"
             />
-          </Grid>
-        </Grid>
+          </div>
 
-        <Typography
-          sx={{ marginTop: "20px", color: "black", textAlign: "center" }}
-          variant="h5"
-        >
+        <h3 className="items-list">
           Items list
-        </Typography>
+        </h3>
 
-        <Grid container rowGap={2} columnGap={2} justifyContent={"center"}>
+        <div className="checkoutTable">
           {Object.values(cart || {}).length > 0 ? (
-            <Table className="table-striped">
-              <TableHead>
-                <TableRow>
-                  <TableCell>Item name</TableCell>
-                  <TableCell>Quantity</TableCell>
-                  <TableCell>Price</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
+            <table className="formBoxTable">
+              <thead className="formBoxHead">
+                <tr className="formBoxTr">
+                  <th className="formBoxTh">Item name</th>
+                  <th className="formBoxTh">Quantity</th>
+                  <th className="formBoxTh">Price</th>
+                </tr>
+              </thead>
+              <tbody className="formBoxTbody">
                 {Object.values(cart || {}).map((dish, index) => (
-                  <TableRow key={index}>
-                    <TableCell style={{ color: "white" }}>
+                  <tr className="formBoxTr" key={index}>
+                    <td className="formBoxTd" style={{ color: "white" }}>
                       {dish.name}
-                    </TableCell>
-                    <TableCell style={{ color: "white" }}>
+                    </td>
+                    <td className="formBoxTd" style={{ color: "white" }}>
                       {dish.quantity}
-                    </TableCell>
-                    <TableCell style={{ color: "white" }}>
+                    </td>
+                    <td className="formBoxTd" style={{ color: "white" }}>
                       ${dish.price * dish.quantity}
-                    </TableCell>
-                  </TableRow>
+                    </td>
+                  </tr>
                 ))}
-              </TableBody>
-            </Table>
+              </tbody>
+            </table>
           ) : (
-            <Typography variant="body1" sx={{ color: "black" }}>
+            <h3 style={{ color: "black" }}>
               No Items
-            </Typography>
+            </h3>
           )}
-        </Grid>
+        </div>
 
-        <Typography
-          variant="h5"
-          sx={{ textAlign: "center", color: "black", marginTop: "20px" }}
-        >
+        <h5 style={{ textAlign: "center", color: "black", marginTop: "20px" }}>
           Total Order Amount: ${totalDisplay}
-        </Typography>
+        </h5>
 
-        <div style={{ textAlign: "center", marginTop: "20px" }}>
-          <Button
-            onClick={submitForm}
-            variant="contained"
-            color="primary"
-            type="submit"
-          >
+        <div className="payNowBox">
+          <button className="payNowButton" type="submit">
             Pay Now
-          </Button>
+          </button>
         </div>
       </form>
     </div>

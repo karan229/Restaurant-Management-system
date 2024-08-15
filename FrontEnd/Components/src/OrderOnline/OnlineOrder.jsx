@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Grid, Typography, Button } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import Fab from '@mui/material/Fab';
 
 const OnlineOrder = () => {
   useEffect(() => {
@@ -51,6 +48,8 @@ const OnlineOrder = () => {
       };
       setSelectedItems(itemsUpdate);
       localStorage.setItem("cart", JSON.stringify(itemsUpdate));
+
+      alert(dish.name + " added to the cart.")
     } else {
       alert("Quantity has to be more than zero.");
     }
@@ -74,54 +73,23 @@ const OnlineOrder = () => {
   };
 
   return (
-    <div style={{ marginTop: "50px" }}>
-      <Fab color="primary" style={{float: 'right', position: 'fixed', zIndex: '1000'}} aria-label="add" onClick={viewCart}>
-        <ShoppingCartIcon />
-      </Fab>
-      
-      <Grid container justifyContent={"center"} rowGap={2} columnGap={2}>
+    <div className="onlineOrderMenuBox">
+      <div className="onlineOrderMenu-grid">
         {menuList.length > 0 ? (
           menuList.map((dish, i) => (
-            <Grid
-              item
-              key={i}
-              xs={12}
-              sm={6}
-              md={4}
-              lg={2.5}
-              sx={{
-                border: "1px solid black",
-                padding: "10px",
-                borderRadius: "8px",
-                background: "white",
-                boxShadow: 3,
-                overflow: "hidden",
-                height: "auto",
-                maxHeight: "400px",
-              }}
-            >
-              <Grid
-                container
-                alignItems="center"
-                justifyContent="center"
-                sx={{ height: "auto", width: "100%" }}
-              >
+            <div key={i} className="gridMenu-item">
+              <div className="imageMenu-box">
                 <img
                   src={`data:image/jpeg;base64,${dish.image}`}
                   alt={dish.name}
-                  style={{ width: "100%", height: "200px", objectFit: "cover" }}
+                  className="imageMenu-img"
                 />
-              </Grid>
-              <Grid item sx={{ textAlign: "center", marginTop: "10px" }}>
-                <Typography
-                  variant="h6"
-                  sx={{ color: "black", marginBottom: "8px" }}
-                >
-                  {dish.name}
-                </Typography>
-                <Typography variant="body1" sx={{ color: "black" }}>
+              </div>
+              <div className="item-data">
+                <h6 className="item-name">{dish.name}</h6>
+                <p className="item-price">
                   Price: {dish.price}$
-                </Typography>
+                </p>
                 <div
                   style={{
                     display: "flex",
@@ -130,54 +98,32 @@ const OnlineOrder = () => {
                     marginTop: "10px",
                   }}
                 >
-                  <Button
-                    onClick={() => handleQuantityChange(dish._id, -1)}
-                    variant="outlined"
-                    sx={{ margin: "0 5px" }}
-                  >
+                  <button onClick={() => handleQuantityChange(dish._id, -1)} className="qty-btn">
                     -
-                  </Button>
-                  <Typography
-                    variant="body1"
-                    sx={{ color: "black", margin: "0 10px" }}
-                  >
+                  </button>
+                  <p className="qty-value">
                     {selectedItems[dish._id]?.quantity || 0}
-                  </Typography>
-                  <Button
-                    onClick={() => handleQuantityChange(dish._id, 1)}
-                    variant="outlined"
-                    sx={{ margin: "0 5px" }}
-                  >
+                  </p>
+                  <button onClick={() => handleQuantityChange(dish._id, 1)} className="qty-btn">
                     +
-                  </Button>
+                  </button>
                 </div>
-              </Grid>
+              </div>
 
-              <Grid
-                container
-                item
-                justifyContent="center"
-                sx={{ marginTop: "10px" }}
-              >
-                <Button
-                  style={{
-                    background:
-                      "linear-gradient(45deg, #ff6b6b, #f06595, #cc5de8)",
-                    color: "white", // To ensure the text color is visible
-                  }}
-                  onClick={() => handleCartButton(dish)}
-                >
+              <div className="cartBox">
+                <button className="cartButton" style={{background: "linear-gradient(45deg, #ff6b6b, #f06595, #cc5de8)", color: "white" }}
+                  onClick={() => handleCartButton(dish)}>
                   Add to Cart
-                </Button>
-              </Grid>
-            </Grid>
+                </button>
+              </div>
+            </div>
           ))
         ) : (
-          <Typography variant="h6" sx={{ color: "black", textAlign: "center" }}>
+          <h2 className="noData">
             No dishes
-          </Typography>
+          </h2>
         )}
-      </Grid>
+      </div>
 
     </div>
   );

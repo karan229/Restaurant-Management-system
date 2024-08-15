@@ -1,5 +1,4 @@
 import React from "react";
-import { Grid, Typography, Button } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -62,92 +61,56 @@ const OrderOnlineCart = () => {
       : "0.00";
 
   return (
-    <div style={{ marginTop: "15px" }}>
-      <Typography
-        sx={{ textAlign: "center", marginBottom: "10px", color: "black" }}
-        variant="h4"
-      >
+    <div className="cartContainer">
+      <h2 className="cartHeading">
         Cart Items
-      </Typography>
-      <Grid container rowGap={2} columnGap={2} justifyContent={"center"}>
+      </h2>
+      <div className="onlineOrderMenu-grid">
         {Object.keys(cart).length > 0 ? (
           Object.values(cart).map((dish, index) => (
-            <Grid
-              item
-              key={index}
-              xs={12}
-              sm={6}
-              md={4}
-              lg={2.5}
-              sx={{
-                border: "1px solid black",
-                padding: "10px",
-                borderRadius: "8px",
-                background: "white",
-                boxShadow: 3,
-                overflow: "hidden",
-                height: "auto",
-                maxHeight: "400px",
-              }}
-            >
-              <Grid
-                container
-                alignItems="center"
-                justifyContent="center"
-                sx={{ height: "auto", width: "100%" }}
-              >
+            <div key={index} className="gridMenu-item">
+              <div className="imageMenu-box">
                 <img
                   src={`data:image/jpeg;base64,${dish.image}`}
                   alt={dish.name}
-                  style={{ width: "100%", height: "200px", objectFit: "cover" }}
+                  className="imageMenu-img"
                 />
-              </Grid>
+              </div>
 
-              <Grid item sx={{ textAlign: "center", marginTop: "10px" }}>
-                <Typography
-                  variant="h6"
-                  sx={{ color: "black", marginBottom: "8px" }}
-                >
+              <div className="item-data">
+                <h6 className="item-name">
                   {dish.name}
-                </Typography>
-                <Typography variant="body1" sx={{ color: "black" }}>
+                </h6>
+                <p className="item-price">
                   Price for {dish.quantity} Quantity: $
                   {dish.price * dish.quantity || 0}
-                </Typography>
-              </Grid>
-              <div style={{ textAlign: "center" }}>
-                <Button
-                  color="error"
-                  variant="outlined"
-                  onClick={() => deleteCartItem(dish._id)}
-                  sx={{ marginTop: "15px" }}
-                >
-                  Remove Item
-                </Button>
+                </p>
               </div>
-            </Grid>
+              <div className="deleteCartBox">
+                <button className="deleteCartButton" onClick={() => deleteCartItem(dish._id)}>
+                  Remove Item
+                </button>
+              </div>
+            </div>
           ))
         ) : (
-          <Typography
-            variant="h5"
+          <h3
             sx={{ textAlign: "center", marginBottom: "20px", color: "black" }}
           >
             Add Items in Cart.
-          </Typography>
+          </h3>
         )}
-      </Grid>
-      <Typography
-        sx={{ marginTop: "20px", color: "black", textAlign: "center" }}
-        variant="h5"
-      >
+      </div>
+      <h2
+        style={{ marginTop: "20px", color: "black", textAlign: "center" }}>
         Total Order Amount: ${totalDisplay}
-      </Typography>
+      </h2>
 
       <div className="btnCheckout" style={{justifyContent: 'center', marginTop: '10px'}}>
         <button
           style={{
             background: "linear-gradient(45deg, #ff6b6b, #f06595, #cc5de8)",
-            color: "white", // To ensure the text color is visible
+            color: "white",
           }}
           className="CheckoutBtn"
           onClick={handleCheckoutForm}
