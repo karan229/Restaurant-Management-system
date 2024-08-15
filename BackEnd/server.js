@@ -142,6 +142,8 @@ const dishSchema = new mongoose.Schema({
     ref: "Category",
     required: true,
   },
+  image: { type: Buffer },
+  imageType: { type: String },
 });
 
 const Category = mongoose.model("Category", categorySchema);
@@ -205,10 +207,17 @@ app.delete("/api/category/:id", async (req, res) => {
     res.status(500).json({ message: "Error deleting category", error });
   }
 });
-
-app.post("/api/dish", async (req, res) => {
+const fileUpload = multer({ storage: multer.memoryStorage() });
+app.post("/api/dish", fileUpload.single("image"), async (req, res) => {
   try {
-    const newDish = new Dish(req.body);
+    const newDish = new Dish({
+      name: req.body.name,
+      price: req.body.price,
+      categoryId: req.body.categoryId,
+      image: req.file.buffer,
+      imageType: req.file.mimetype,
+    });
+
     await newDish.save();
     await Category.findByIdAndUpdate(req.body.categoryId, {
       $push: { dishes: newDish._id },

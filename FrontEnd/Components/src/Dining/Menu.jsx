@@ -9,11 +9,11 @@ const MenuPage = () => {
   const [selectedItems, setSelectedItems] = useState([]);
 
   useEffect(() => {
-    const rootElement = document.getElementById("root");
-    rootElement.classList.add("rootFullWidth");
+    const rootElement = document.getElementById('root');
+    if (rootElement) rootElement.classList.add('rootFullWidth');
 
     return () => {
-      rootElement.classList.remove("rootFullWidth");
+      if (rootElement) rootElement.classList.remove('rootFullWidth');
     };
   }, []);
 
@@ -21,7 +21,10 @@ const MenuPage = () => {
     const fetchMenu = async () => {
       try {
         const response = await fetch('http://localhost:8000/api/menu');
+        if (!response.ok) throw new Error('Network response was not ok');
+        
         const data = await response.json();
+        console.log('Menu data:', data);
         if (Array.isArray(data)) {
           setCategories(data);
           setSelectedCategory(data[0]?._id || '');
@@ -37,35 +40,41 @@ const MenuPage = () => {
   }, []);
 
   useEffect(() => {
-    const savedItems = JSON.parse(localStorage.getItem(`selectedItems_${tableId}`)) || [];
-    setSelectedItems(savedItems);
+    try {
+      const savedItems = JSON.parse(localStorage.getItem(`selectedItems_${tableId}`)) || [];
+      setSelectedItems(savedItems);
+    } catch (error) {
+      console.error('Error loading items from localStorage:', error);
+    }
   }, [tableId]);
 
   useEffect(() => {
-    try {
-      if (tableId) {
+    if (tableId) {
+      try {
         localStorage.setItem(`selectedItems_${tableId}`, JSON.stringify(selectedItems));
+      } catch (error) {
+        console.error('Error saving items to localStorage:', error);
       }
-    } catch (e) {
-      console.error('LocalStorage quota exceeded or other error:', e);
     }
   }, [selectedItems, tableId]);
 
   const handleQuantityChange = (item, quantity) => {
-    const updatedItems = [...selectedItems];
-    const index = updatedItems.findIndex(selectedItem => selectedItem._id === item._id);
+    setSelectedItems(prevItems => {
+      const updatedItems = [...prevItems];
+      const index = updatedItems.findIndex(selectedItem => selectedItem._id === item._id);
 
-    if (index >= 0) {
-      if (quantity > 0) {
-        updatedItems[index].quantity = quantity;
-      } else {
-        updatedItems.splice(index, 1);
+      if (index >= 0) {
+        if (quantity > 0) {
+          updatedItems[index].quantity = quantity;
+        } else {
+          updatedItems.splice(index, 1);
+        }
+      } else if (quantity > 0) {
+        updatedItems.push({ ...item, quantity });
       }
-    } else if (quantity > 0) {
-      updatedItems.push({ ...item, quantity });
-    }
 
-    setSelectedItems(updatedItems);
+      return updatedItems;
+    });
   };
 
   const handleCheckout = () => {
@@ -78,57 +87,40 @@ const MenuPage = () => {
 
   return (
     <div className='menu-container'>
-      <div>
-        <h1 style={{ color: 'black', padding: '10px' }}>Menu for Table {tableId}</h1>
-      </div>
-
+      <h1>Menu for Table {tableId}</h1>
       <div className="menu-title">
         {categories.map(category => (
           <div
             key={category._id}
-            className="category-container"
+            className={`category-container ${category._id === selectedCategory ? 'selected' : ''}`}
             onClick={() => setSelectedCategory(category._id)}
           >
             <div className="category-title">{category.name}</div>
-            {category.image && (
-              <img
-                src={`data:${category.image.contentType};base64,${btoa(
-                  String.fromCharCode(...new Uint8Array(category.image.data))
-                )}`}
-                alt={category.name}
-                style={{ width: '100px', height: '100px' }}
-              />
-            )}
           </div>
         ))}
       </div>
-
       <div className="menu-list">
-        {categories.find(cat => cat._id === selectedCategory)?.dishes.map(item => {
-          const selectedItem = selectedItems.find(selectedItem => selectedItem._id === item._id);
-          const quantity = selectedItem ? selectedItem.quantity : 0;
-          return (
-            <div key={item._id} className="list">
-              <span>{item.name} <br />- ${item.price}</span>
-              {item.image && (
-                <img
-                  src={`data:${item.image.contentType};base64,${btoa(
-                    String.fromCharCode(...new Uint8Array(item.image.data))
-                  )}`}
-                  alt={item.name}
-                  style={{ width: '100px', height: '100px' }}
-                />
-              )}
-              <div className="button">
-                <span onClick={() => handleQuantityChange(item, quantity - 1)} className="minus">-</span>
-                <span>{quantity}</span>
-                <span onClick={() => handleQuantityChange(item, quantity + 1)} className="plus">+</span>
-              </div>
+        {categories.find(cat => cat._id === selectedCategory)?.dishes.map(item => (
+          <div key={item._id} className="list">
+            <span>{item.name} <br />- ${item.price}</span>
+            <div className="button">
+              <span 
+                onClick={() => handleQuantityChange(item, Math.max((selectedItems.find(i => i._id === item._id)?.quantity || 0) - 1, 0))}
+                className="minus"
+              >
+                -
+              </span>
+              <span>{selectedItems.find(i => i._id === item._id)?.quantity || 0}</span>
+              <span 
+                onClick={() => handleQuantityChange(item, (selectedItems.find(i => i._id === item._id)?.quantity || 0) + 1)}
+                className="plus"
+              >
+                +
+              </span>
             </div>
-          );
-        })}
+          </div>
+        ))}
       </div>
-
       <div className="btnCheckout">
         <button className='CheckoutBtn' onClick={handleCheckout}>Checkout</button>
       </div>
