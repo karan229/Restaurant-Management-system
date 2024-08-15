@@ -30,7 +30,7 @@ const UpdateItem = ({ item, onUpdate, onCancel }) => {
     }
 
     try {
-      await axios.put(`http://localhost:8000/api/items/${item._id}`, formData, {
+      await axios.put(`https://restaurant-management-system-jpbc.onrender.com/api/items/${item._id}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
