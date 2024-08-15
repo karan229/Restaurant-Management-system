@@ -11,7 +11,7 @@ function Home() {
   const [isLoading, setIsLoading] = useState(false);
 
   const getItems = () => {
-    return axios.get('http://localhost:8000/items')
+    return axios.get('https://restaurant-management-system-jpbc.onrender.com/items')
       .then(response => response.data)
       .then((data) => {
         setItems(data);

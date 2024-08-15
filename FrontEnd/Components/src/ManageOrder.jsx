@@ -14,7 +14,7 @@ const ManageOrder = () => {
 
   const fetchOrders = async () => {
     try {
-      const response = await axios.get('http://localhost:8000/api/orders');
+      const response = await axios.get('https://restaurant-management-system-jpbc.onrender.com/api/orders');
       setOrders(response.data);
       setLoading(false);
     } catch (error) {
@@ -25,7 +25,7 @@ const ManageOrder = () => {
 
   const handleStatusChange = async (orderId, newStatus) => {
     try {
-      await axios.put(`http://localhost:8000/api/orders/${orderId}/status`, { status: newStatus });
+      await axios.put(`https://restaurant-management-system-jpbc.onrender.com/api/orders/${orderId}/status`, { status: newStatus });
       setOrders((prevOrders) =>
         prevOrders.map((order) =>
           order._id === orderId ? { ...order, status: newStatus } : order

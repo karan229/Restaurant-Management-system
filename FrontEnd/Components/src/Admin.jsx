@@ -14,7 +14,7 @@ function Admin() {
       }
 
       try {
-        const response = await axios.get(`http://localhost:8000/admin-details?email=${email}`);
+        const response = await axios.get(`https://restaurant-management-system-jpbc.onrender.com/admin-details?email=${email}`);
         setUserData(response.data);
       } catch (error) {
         setError(error.message);

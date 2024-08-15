@@ -62,7 +62,7 @@ export default function App() {
   }, []);
 
   const verifyToken = (token) => {
-    fetch('http://localhost:8000/secure', {
+    fetch('https://restaurant-management-system-jpbc.onrender.com/secure', {
       headers: {
         Authorization: `Bearer ${token}`,
       },

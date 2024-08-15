@@ -29,7 +29,7 @@ const Login = ({ onLogin }) => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8000/login', {
+      const response = await axios.post('https://restaurant-management-system-jpbc.onrender.com/login', {
         email,
         password,
       });
@@ -38,7 +38,7 @@ const Login = ({ onLogin }) => {
       localStorage.setItem('userEmail', response.data.email);
       localStorage.setItem('isLoggedIn', 'true');
 
-      const userResponse = await axios.get(`http://localhost:8000/user/${email}`);
+      const userResponse = await axios.get(`https://restaurant-management-system-jpbc.onrender.com/user/${email}`);
       const username = userResponse.data.username;
 
       alert(`Welcome Back ${username}`);
@@ -55,7 +55,7 @@ const Login = ({ onLogin }) => {
   const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:8000/register', {
+      const response = await axios.post('https://restaurant-management-system-jpbc.onrender.com/register', {
         username,
         email,
         password,
