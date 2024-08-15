@@ -37,14 +37,14 @@ const CheckoutForm = ({ amount, dataForm, cart }) => {
     }
 
     try {
-      const res = await fetch("http://localhost:8000/create-payment-intent", {
+      const res = await fetch("https://restaurant-management-system-jpbc.onrender.com/create-payment-intent", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ amount: amount * 100 }),
       });
       const data = await res.json();
 
-      await fetch("http://localhost:8000/online-order", {
+      await fetch("https://restaurant-management-system-jpbc.onrender.com/online-order", {
         method: "post",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
