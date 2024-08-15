@@ -1,37 +1,43 @@
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const mongoose = require('mongoose');
-const path = require('path');
-const bodyParser = require('body-parser');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const multer = require('multer');
-const sendBillEmail = require('./sendBill'); // Import the sendBillEmail function
+require("dotenv").config();
+const express = require("express");
+const cors = require("cors");
+const mongoose = require("mongoose");
+const path = require("path");
+const bodyParser = require("body-parser");
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+const multer = require("multer");
+const sendBillEmail = require("./sendBill");
 
-console.log('MongoDB Connection String:', process.env.STRING);
+console.log("MongoDB Connection String:", process.env.STRING);
 
 const app = express();
 app.use(cors());
-app.use(bodyParser.json({ limit: '50mb' }));
-app.use(express.json({ limit: '50mb' }));
-app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(express.json({ limit: "50mb" }));
+app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
 const dbConnectionString = process.env.STRING;
-const JWT_SECRET = process.env.JWT_SECRET || 'BhuimiiiiiiiiiiKaaaaaaaa';
-const TOKEN_EXPIRATION = '1h';
+const JWT_SECRET = process.env.JWT_SECRET || "BhuimiiiiiiiiiiKaaaaaaaa";
+const TOKEN_EXPIRATION = "1h";
 
 if (!dbConnectionString) {
-  console.error('Error: MongoDB connection string is not defined.');
+  console.error("Error: MongoDB connection string is not defined.");
   process.exit(1);
 }
 
-mongoose.connect(dbConnectionString, { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log('My App is connected to Database!!'))
+mongoose
+  .connect(dbConnectionString, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  })
+  .then(() => console.log("My App is connected to Database!!"))
   .catch((error) => {
-    console.error('Error connecting to the database:', error.message);
+    console.error("Error connecting to the database:", error.message);
     process.exit(1);
   });
+
+// schema for dine in order
 const orderSchema = new mongoose.Schema({
   tableId: {
     type: String,
@@ -50,11 +56,11 @@ const orderSchema = new mongoose.Schema({
   ],
   customization: {
     type: String,
-    default: '',
+    default: "",
   },
   status: {
     type: String,
-    default: 'Preparing',
+    default: "Preparing",
   },
   createdAt: {
     type: Date,
@@ -62,14 +68,55 @@ const orderSchema = new mongoose.Schema({
   },
 });
 
-const Order = mongoose.model('Order', orderSchema);
+const Order = mongoose.model("Order", orderSchema);
+
+// schema for online order
+const onlineOrderSchema = new mongoose.Schema({
+  name: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+  },
+  address: {
+    type: String,
+    required: true,
+  },
+  phoneNumber: {
+    type: String,
+    required: true,
+  },
+  cart: [
+    {
+      name: String,
+      quantity: Number,
+      price: Number,
+    },
+  ],
+  status: {
+    type: String,
+    default: "Preparing",
+  },
+  totalAmount: {
+    type: Number,
+    required: true,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+});
+
+const OnlineOrder = mongoose.model("OnlineOrder", onlineOrderSchema);
 const userSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   userType: { type: String, required: true },
   joiningDate: { type: Date, default: Date.now },
-  status: { type: String, default: 'active' },
+  status: { type: String, default: "active" },
 });
 
 const itemsSchema = new mongoose.Schema({
@@ -79,79 +126,87 @@ const itemsSchema = new mongoose.Schema({
   available: { type: Boolean, required: true },
 });
 
-const Items = mongoose.model('items', itemsSchema);
-const User = mongoose.model('User', userSchema);
+const Items = mongoose.model("items", itemsSchema);
+const User = mongoose.model("User", userSchema);
 
 const categorySchema = new mongoose.Schema({
   name: { type: String, required: true, unique: true },
-  dishes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Dish' }]
+  dishes: [{ type: mongoose.Schema.Types.ObjectId, ref: "Dish" }],
 });
 
 const dishSchema = new mongoose.Schema({
   name: { type: String, required: true },
   price: { type: Number, required: true },
-  categoryId: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true }
+  categoryId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Category",
+    required: true,
+  },
 });
 
-const Category = mongoose.model('Category', categorySchema);
-const Dish = mongoose.model('Dish', dishSchema);
+const Category = mongoose.model("Category", categorySchema);
+const Dish = mongoose.model("Dish", dishSchema);
 
-app.get('/api/menu', async (req, res) => {
+app.get("/api/menu", async (req, res) => {
   try {
-    const categories = await Category.find().populate('dishes');
+    const categories = await Category.find().populate("dishes");
     res.status(200).json(categories);
   } catch (error) {
-    console.error('Error fetching categories:', error);
-    res.status(500).json({ message: 'Error fetching categories', error });
+    console.error("Error fetching categories:", error);
+    res.status(500).json({ message: "Error fetching categories", error });
   }
 });
 
-
-app.post('/api/category', async (req, res) => {
+app.post("/api/category", async (req, res) => {
   try {
     const newCategory = new Category({
-      name: req.body.name
+      name: req.body.name,
     });
 
     await newCategory.save();
     res.status(201).json(newCategory);
   } catch (error) {
-    console.error('Error creating category:', error);
-    res.status(500).json({ message: 'Error creating category', error });
+    console.error("Error creating category:", error);
+    res.status(500).json({ message: "Error creating category", error });
   }
 });
 
-
-app.put('/api/category/:id', async (req, res) => {
+app.put("/api/category/:id", async (req, res) => {
   try {
     const updateData = {
-      name: req.body.name
+      name: req.body.name,
     };
 
-    const updatedCategory = await Category.findByIdAndUpdate(req.params.id, updateData, { new: true });
+    const updatedCategory = await Category.findByIdAndUpdate(
+      req.params.id,
+      updateData,
+      { new: true }
+    );
     if (!updatedCategory) {
-      return res.status(404).json({ message: 'Category not found' });
+      return res.status(404).json({ message: "Category not found" });
     }
 
     res.status(200).json(updatedCategory);
   } catch (error) {
-    res.status(500).json({ message: 'Error updating category', error });
+    res.status(500).json({ message: "Error updating category", error });
   }
 });
 
-app.delete('/api/category/:id', async (req, res) => {
+app.delete("/api/category/:id", async (req, res) => {
   try {
     const deletedCategory = await Category.findByIdAndDelete(req.params.id);
     if (!deletedCategory) {
-      return res.status(404).json({ message: 'Category not found' });
+      return res.status(404).json({ message: "Category not found" });
     }
-    res.status(200).json({ message: 'Category deleted successfully', deletedCategory });
+    res
+      .status(200)
+      .json({ message: "Category deleted successfully", deletedCategory });
   } catch (error) {
-    res.status(500).json({ message: 'Error deleting category', error });
+    res.status(500).json({ message: "Error deleting category", error });
   }
 });
 
-app.post('/api/dish', async (req, res) => {
+app.post("/api/dish", async (req, res) => {
   try {
     const newDish = new Dish(req.body);
     await newDish.save();
@@ -160,54 +215,97 @@ app.post('/api/dish', async (req, res) => {
     });
     res.status(201).json(newDish);
   } catch (error) {
-    console.error('Error creating dish:', error);
-    res.status(500).json({ message: 'Error creating dish', error });
+    console.error("Error creating dish:", error);
+    res.status(500).json({ message: "Error creating dish", error });
   }
 });
 
-
-app.put('/api/dish/:id', async (req, res) => {
+app.put("/api/dish/:id", async (req, res) => {
   try {
     const updateData = {
       name: req.body.name,
-      price: req.body.price
+      price: req.body.price,
     };
 
-    const updatedDish = await Dish.findByIdAndUpdate(req.params.id, updateData, { new: true });
+    const updatedDish = await Dish.findByIdAndUpdate(
+      req.params.id,
+      updateData,
+      { new: true }
+    );
     if (!updatedDish) {
-      return res.status(404).json({ message: 'Dish not found' });
+      return res.status(404).json({ message: "Dish not found" });
     }
 
     res.status(200).json(updatedDish);
   } catch (error) {
-    res.status(500).json({ message: 'Error updating dish', error });
+    res.status(500).json({ message: "Error updating dish", error });
   }
 });
 
-app.delete('/api/dish/:id', async (req, res) => {
+app.delete("/api/dish/:id", async (req, res) => {
   try {
     const deletedDish = await Dish.findByIdAndDelete(req.params.id);
     if (!deletedDish) {
-      return res.status(404).json({ message: 'Dish not found' });
+      return res.status(404).json({ message: "Dish not found" });
     }
-    res.status(200).json({ message: 'Dish deleted successfully', deletedDish });
+    res.status(200).json({ message: "Dish deleted successfully", deletedDish });
   } catch (error) {
-    res.status(500).json({ message: 'Error deleting dish', error });
+    res.status(500).json({ message: "Error deleting dish", error });
   }
 });
 
+//post request for payment gateway
+app.post("/create-payment-intent", async (req, res) => {
+  const { amount } = req.body;
+  const stripe = require("stripe")(
+    "sk_test_51PnkHeAmDb0gT9Fp0MCqGic27TkvgdIH9mE4EA7GuNbbOFhZmTwkU861ihz8wPWz80TAhsd062CTFPLGhTNeFj9E007wqGVfLX"
+  );
+  try {
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount,
+      currency: "usd",
+      automatic_payment_methods: {
+        enabled: true,
+      },
+    });
 
-app.get('/', (req, res) => {
-  res.send('API IS WORKING!');
+    res.send({
+      clientSecret: paymentIntent.client_secret,
+    });
+  } catch (error) {
+    res.status(500).send({ error: error.message });
+  }
 });
 
-app.post('/register', async (req, res) => {
+app.get("/", (req, res) => {
+  res.send("API IS WORKING!");
+});
+
+app.post("/online-order", async (req, res) => {
+  try {
+    const newOrder = new OnlineOrder({
+      name: req.body.name,
+      email: req.body.email,
+      address: req.body.address,
+      phoneNumber: req.body.phoneNumber,
+      cart: req.body.cart,
+      totalAmount: req.body.totalAmount,
+    });
+
+    const savedOrder = await newOrder.save();
+    res.status(201).json(savedOrder);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post("/register", async (req, res) => {
   const { username, email, password, userType } = req.body;
 
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ message: 'User already exists' });
+      return res.status(400).json({ message: "User already exists" });
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -228,50 +326,63 @@ app.post('/register', async (req, res) => {
     );
 
     console.log("User registered successfully");
-    res.status(201).json({ message: 'User registered successfully', token, userType: newUser.userType });
+    res.status(201).json({
+      message: "User registered successfully",
+      token,
+      userType: newUser.userType,
+    });
   } catch (error) {
-    res.status(500).json({ message: 'Error registering user', error });
+    res.status(500).json({ message: "Error registering user", error });
     console.log("Error registering user:", error);
   }
 });
 
-app.post('/login', async (req, res) => {
+app.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
   try {
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(400).json({ message: 'User not found' });
+      return res.status(400).json({ message: "User not found" });
     }
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
-      return res.status(400).json({ message: 'Invalid password' });
+      return res.status(400).json({ message: "Invalid password" });
     }
-    const token = jwt.sign({ userId: user._id, userType: user.userType }, JWT_SECRET, { expiresIn: TOKEN_EXPIRATION });
-    res.status(200).json({ message: 'Login successful', token, userType: user.userType, email: user.email });
+    const token = jwt.sign(
+      { userId: user._id, userType: user.userType },
+      JWT_SECRET,
+      { expiresIn: TOKEN_EXPIRATION }
+    );
+    res.status(200).json({
+      message: "Login successful",
+      token,
+      userType: user.userType,
+      email: user.email,
+    });
   } catch (error) {
-    res.status(500).json({ message: 'Error logging in', error });
+    res.status(500).json({ message: "Error logging in", error });
     console.log("Error logging in:", error);
   }
 });
 
-app.get('/items', async (req, res) => {
+app.get("/items", async (req, res) => {
   try {
     const items = await Items.find();
     if (!items) {
-      return res.status(404).json({ message: 'No Items' });
+      return res.status(404).json({ message: "No Items" });
     }
     res.status(200).json(items);
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching item details', error });
+    res.status(500).json({ message: "Error fetching item details", error });
   }
 });
 
 // Middleware for login & registration by using jwt tokens; reference - https://www.youtube.com/watch?v=dX_LteE0NFM
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers.authorization;
-  const token = authHeader && authHeader.split(' ')[1];
+  const token = authHeader && authHeader.split(" ")[1];
 
   if (token == null) return res.sendStatus(401);
 
@@ -283,25 +394,25 @@ const authenticateToken = (req, res, next) => {
 };
 
 const checkAdmin = (req, res, next) => {
-  if (req.user.userType !== 'admin') {
-    return res.status(403).json({ message: 'Access denied. Admins only.' });
+  if (req.user.userType !== "admin") {
+    return res.status(403).json({ message: "Access denied. Admins only." });
   }
   next();
 };
 
-app.get('/secure', authenticateToken, (req, res) => {
-  res.json({ message: 'Secure connection', user: req.user });
+app.get("/secure", authenticateToken, (req, res) => {
+  res.json({ message: "Secure connection", user: req.user });
 });
 
-app.get('/user/:email', async (req, res) => {
+app.get("/user/:email", async (req, res) => {
   try {
     const user = await User.findOne({ email: req.params.email });
     if (!user) {
-      return res.status(404).json({ message: 'User not found' });
+      return res.status(404).json({ message: "User not found" });
     }
     res.status(200).json(user);
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching user', error });
+    res.status(500).json({ message: "Error fetching user", error });
     console.log("Error fetching user:", error);
   }
 });
@@ -321,10 +432,10 @@ const itemSchema = new Schema({
   imageType: String,
 });
 
-const Item = mongoose.model('Item', itemSchema);
+const Item = mongoose.model("Item", itemSchema);
 
 // API endpoint for uploading an item
-app.post('/api/upload', upload.single('image'), async (req, res) => {
+app.post("/api/upload", upload.single("image"), async (req, res) => {
   try {
     const newItem = new Item({
       ItemName: req.body.ItemName,
@@ -337,24 +448,24 @@ app.post('/api/upload', upload.single('image'), async (req, res) => {
 
     await newItem.save();
 
-    res.status(201).json({ message: 'Data inserted successfully', newItem });
+    res.status(201).json({ message: "Data inserted successfully", newItem });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: "Server error" });
   }
 });
 
-app.get('/api/items', async (req, res) => {
+app.get("/api/items", async (req, res) => {
   try {
     const items = await Item.find();
     res.status(200).json(items);
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: "Server error" });
   }
 });
 
-app.put('/api/items/:id', upload.single('image'), async (req, res) => {
+app.put("/api/items/:id", upload.single("image"), async (req, res) => {
   const { id } = req.params;
 
   try {
@@ -362,7 +473,7 @@ app.put('/api/items/:id', upload.single('image'), async (req, res) => {
       ItemName: req.body.ItemName,
       quantity: req.body.quantity,
       Price: req.body.Price,
-      Available: req.body.Available
+      Available: req.body.Available,
     };
 
     if (req.file) {
@@ -370,69 +481,81 @@ app.put('/api/items/:id', upload.single('image'), async (req, res) => {
       updateData.imageType = req.file.mimetype;
     }
 
-    const updatedItem = await Item.findByIdAndUpdate(id, updateData, { new: true });
+    const updatedItem = await Item.findByIdAndUpdate(id, updateData, {
+      new: true,
+    });
     if (!updatedItem) {
-      return res.status(404).json({ message: 'Not found' });
+      return res.status(404).json({ message: "Not found" });
     }
 
-    res.status(200).json({ message: 'Updated successfully', updatedItem });
+    res.status(200).json({ message: "Updated successfully", updatedItem });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: "Server error" });
   }
 });
 
-app.delete('/api/items/:id', async (req, res) => {
+app.delete("/api/items/:id", async (req, res) => {
   const { id } = req.params;
 
   try {
     const deletedItem = await Item.findByIdAndDelete(id);
     if (!deletedItem) {
-      return res.status(404).json({ message: 'Not Found' });
+      return res.status(404).json({ message: "Not Found" });
     }
-    res.status(200).json({ message: 'Deleted successfully', deletedItem });
+    res.status(200).json({ message: "Deleted successfully", deletedItem });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: 'Server error' });
+    res.status(500).json({ message: "Server error" });
   }
 });
 
-app.get('/admin-details', async (req, res) => {
+app.get("/admin-details", async (req, res) => {
   const adminEmail = req.query.email;
 
   if (!adminEmail) {
-    return res.status(400).json({ message: 'Admin email is required' });
+    return res.status(400).json({ message: "Admin email is required" });
   }
 
   try {
-    const adminUser = await User.findOne({ email: adminEmail, userType: 'admin' });
+    const adminUser = await User.findOne({
+      email: adminEmail,
+      userType: "admin",
+    });
 
     if (!adminUser) {
-      return res.status(404).json({ message: 'Admin details not found' });
+      return res.status(404).json({ message: "Admin details not found" });
     }
 
     const { username, email, joiningDate, status, profilePicture } = adminUser;
-    res.status(200).json({ username, email, joiningDate, status, profilePicture });
+    res
+      .status(200)
+      .json({ username, email, joiningDate, status, profilePicture });
   } catch (error) {
-    res.status(500).json({ message: 'Error fetching admin details', error });
+    res.status(500).json({ message: "Error fetching admin details", error });
   }
 });
 
 const authenticateAdmin = (req, res, next) => {
   const { userType } = req.user;
-  if (userType === 'admin') {
+  if (userType === "admin") {
     next();
   } else {
-    res.status(403).json({ message: 'Access denied: Admins only' });
+    res.status(403).json({ message: "Access denied: Admins only" });
   }
 };
 
-app.get('/inventory', authenticateToken, authenticateAdmin, async (req, res) => {
-  res.json({ message: 'Welcome to Inventory' });
-});
+app.get(
+  "/inventory",
+  authenticateToken,
+  authenticateAdmin,
+  async (req, res) => {
+    res.json({ message: "Welcome to Inventory" });
+  }
+);
 
 // New endpoint for sending bill email
-app.post('/api/send-bill', async (req, res) => {
+app.post("/api/send-bill", async (req, res) => {
   const { email, tableId, selectedItems, customization } = req.body;
 
   try {
@@ -444,15 +567,15 @@ app.post('/api/send-bill', async (req, res) => {
     });
     await newOrder.save();
     await sendBillEmail(email, tableId, selectedItems, customization);
-    res.status(200).json({ message: 'Bill sent successfully' });
+    res.status(200).json({ message: "Bill sent successfully" });
   } catch (error) {
-    console.error('Error sending bill:', error);
-    res.status(500).json({ message: 'Error sending bill', error });
+    console.error("Error sending bill:", error);
+    res.status(500).json({ message: "Error sending bill", error });
   }
 });
 
 const port = process.env.PORT || 8000;
 
 app.listen(port, () => {
-  console.log('My App is running on this port:', port);
+  console.log("My App is running on this port:", port);
 });

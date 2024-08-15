@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { Grid, Typography, Button } from "@mui/material";
-import { json, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import Fab from '@mui/material/Fab';
 
 const OnlineOrder = () => {
   useEffect(() => {
@@ -23,6 +25,7 @@ const OnlineOrder = () => {
       const data = await response.json();
       const fetchDishes = data.flatMap((menu) => menu.dishes || []);
       setMenuList(fetchDishes);
+      console.log(fetchDishes);
     } catch (error) {
       console.error("Error fetching menu:", error);
     }
@@ -72,15 +75,10 @@ const OnlineOrder = () => {
 
   return (
     <div style={{ marginTop: "50px" }}>
-      <Button
-        style={{ marginTop: "80px" }}
-        color="secondary"
-        onClick={viewCart}
-        variant="contained"
-        sx={{ position: "fixed", top: "10px", right: "10px" }}
-      >
-        View Cart
-      </Button>
+      <Fab color="primary" style={{float: 'right', position: 'fixed', zIndex: '1000'}} aria-label="add" onClick={viewCart}>
+        <ShoppingCartIcon />
+      </Fab>
+      
       <Grid container justifyContent={"center"} rowGap={2} columnGap={2}>
         {menuList.length > 0 ? (
           menuList.map((dish, i) => (
@@ -109,7 +107,7 @@ const OnlineOrder = () => {
                 sx={{ height: "auto", width: "100%" }}
               >
                 <img
-                  src="https://picsum.photos/200/300"
+                  src={`data:image/jpeg;base64,${dish.image}`}
                   alt={dish.name}
                   style={{ width: "100%", height: "200px", objectFit: "cover" }}
                 />
@@ -180,6 +178,7 @@ const OnlineOrder = () => {
           </Typography>
         )}
       </Grid>
+
     </div>
   );
 };

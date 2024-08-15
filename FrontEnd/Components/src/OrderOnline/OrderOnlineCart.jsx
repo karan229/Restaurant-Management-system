@@ -97,7 +97,7 @@ const OrderOnlineCart = () => {
                 sx={{ height: "auto", width: "100%" }}
               >
                 <img
-                  src="https://picsum.photos/200/300"
+                  src={`data:image/jpeg;base64,${dish.image}`}
                   alt={dish.name}
                   style={{ width: "100%", height: "200px", objectFit: "cover" }}
                 />
