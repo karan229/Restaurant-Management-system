@@ -965,8 +965,6 @@ td {
   transform: scale(1.05);
 }
 
-
-
 /* Checkout Page Styles */
 .checkout-container {
   background-color: #4158d0;
@@ -980,14 +978,14 @@ td {
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   padding: 20px;
-  margin: 20px;
+  margin: 20px auto;
   text-align: center;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  margin-left: auto;
-  margin-right: auto;
+  position: relative;
   margin-top: 124px !important;
+  min-height: calc(100vh - 124px);
 }
 
 .title-checkout h1 {
@@ -1002,7 +1000,6 @@ td {
   border-radius: 8px;
   padding: 10px;
   display: flex;
-  overflow: hidden;
   flex-direction: column;
 }
 
@@ -1081,26 +1078,26 @@ td {
   color: #fff;
 }
 
-.titleMainPage{
+.titleMainPage {
   text-align: center;
   padding: 15px;
   font-size: 2.5rem;
   color: black;
 }
 
-.bannerMainPage img{
+.bannerMainPage img {
   width: 100%;
   height: auto;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-.bannerMainPage{
+.bannerMainPage {
   width: 100%;
   margin: 20px auto;
 }
 
-.aboutUsTitle{
+.aboutUsTitle {
   margin: 20px;
   text-align: center;
   font-size: 2rem;
@@ -1159,11 +1156,11 @@ td {
   }
 }
 
-
-.mainPage{
+.mainPage {
   background: #eeeeee;
   padding: 10px;
 }
+
 .customization-input {
   width: 100%;
   max-width: 400px;
@@ -1199,6 +1196,7 @@ td {
   background-color: rgba(255, 255, 255, 0.3);
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
 }
+
 
 /* Admin Inventory Page */
 .admin-inventory {

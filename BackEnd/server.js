@@ -7,7 +7,7 @@ const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const multer = require('multer');
-const sendBillEmail = require('./sendBill'); // Import the sendBillEmail function
+const sendBillEmail = require('./sendBill');
 
 console.log('MongoDB Connection String:', process.env.STRING);
 
@@ -90,11 +90,14 @@ const categorySchema = new mongoose.Schema({
 const dishSchema = new mongoose.Schema({
   name: { type: String, required: true },
   price: { type: Number, required: true },
-  categoryId: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true }
+  categoryId: { type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true },
+  image: { type: Buffer },
+  imageType: { type: String } 
 });
 
 const Category = mongoose.model('Category', categorySchema);
 const Dish = mongoose.model('Dish', dishSchema);
+
 
 app.get('/api/menu', async (req, res) => {
   try {
@@ -105,6 +108,7 @@ app.get('/api/menu', async (req, res) => {
     res.status(500).json({ message: 'Error fetching categories', error });
   }
 });
+
 
 
 app.post('/api/category', async (req, res) => {
@@ -150,10 +154,17 @@ app.delete('/api/category/:id', async (req, res) => {
     res.status(500).json({ message: 'Error deleting category', error });
   }
 });
-
-app.post('/api/dish', async (req, res) => {
+const fileUpload = multer({ storage: multer.memoryStorage() });
+app.post('/api/dish', fileUpload.single('image'), async (req, res) => {
   try {
-    const newDish = new Dish(req.body);
+    const newDish = new Dish({
+      name: req.body.name,
+      price: req.body.price,
+      categoryId: req.body.categoryId,
+      image: req.file.buffer,
+      imageType: req.file.mimetype
+    });
+
     await newDish.save();
     await Category.findByIdAndUpdate(req.body.categoryId, {
       $push: { dishes: newDish._id },
@@ -164,7 +175,6 @@ app.post('/api/dish', async (req, res) => {
     res.status(500).json({ message: 'Error creating dish', error });
   }
 });
-
 
 app.put('/api/dish/:id', async (req, res) => {
   try {
