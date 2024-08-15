@@ -18,7 +18,7 @@ const OnlineOrder = () => {
 
   const fetchMenu = async () => {
     try {
-      const response = await fetch("http://localhost:8000/api/menu");
+      const response = await fetch("https://restaurant-management-system-jpbc.onrender.com/api/menu");
       const data = await response.json();
       const fetchDishes = data.flatMap((menu) => menu.dishes || []);
       setMenuList(fetchDishes);
