@@ -1,27 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
-import RestoHome from './src/RestoHome.jsx';
-import Home from './src/Home.jsx';
-import Login from "./src/Login.jsx";
-import NavBar from "./src/Navbar.jsx";
-import TopNavBar from "./src/TopNavBar.jsx";
-import Admin from "./src/Admin.jsx";
-import Stock from "./src/Stock.jsx";
-import Order from './src/Order.jsx';
-import RestoNavbar from "./src/RestoNavbar.jsx";
-import Dining from './src/Dining/Dining.jsx';
-import Menu from './src/Dining/Menu.jsx';
-import CheckoutPage from './src/Dining/Checkout.jsx';
-import ConfirmationPage from './src/Dining/Confirm.jsx';
-import OnlineOrder from './src/OrderOnline/OnlineOrder.jsx';
-import AdminInventory from './src/Dining/AdminInventoryPage.jsx'
-import OrderOnlineCart from './src/OrderOnline/OrderOnlineCart.jsx';
-import OrderOnlineCheckout from './src/OrderOnline/OrderOnlineCheckout.jsx';
-import OrderOnlinePayment from './src/OrderOnline/OrderOnlinePayment.jsx';
-import OrderOnlineNavbar from './src/OrderOnline/OnlineOrderNavbar.jsx';
-import RecipePage from "./src/Dining/Recipe.jsx";
-import ManageOrder from './src/ManageOrder.jsx';
+import RestoHome from './Components/RestoHome.jsx';
+import Home from './Components/Home.jsx';
+import Login from "./Components/Login.jsx";
+import NavBar from "./Components/Navbar.jsx";
+import TopNavBar from "./Components/TopNavBar.jsx";
+import Admin from "./Components/Admin.jsx";
+import Stock from "./Components/Stock.jsx";
+import Order from './Components/Order.jsx';
+import RestoNavbar from "./Components/RestoNavbar.jsx";
+import Dining from './Components/Dining/Dining.jsx';
+import Menu from './Components/Dining/Menu.jsx';
+import CheckoutPage from './Components/Dining/Checkout.jsx';
+import ConfirmationPage from './Components/Dining/Confirm.jsx';
+import OnlineOrder from './Components/OrderOnline/OnlineOrder.jsx';
+import AdminInventory from './Components/Dining/AdminInventoryPage.jsx'
+import OrderOnlineCart from './Components/OrderOnline/OrderOnlineCart.jsx';
+import OrderOnlineCheckout from './Components/OrderOnline/OrderOnlineCheckout.jsx';
+import OrderOnlinePayment from './Components/OrderOnline/OrderOnlinePayment.jsx';
+import OrderOnlineNavbar from './Components/OrderOnline/OnlineOrderNavbar.jsx';
+import RecipePage from "./Components/Dining/Recipe.jsx";
+import ManageOrder from './Components/ManageOrder.jsx';
 
 const NotFound = () => <h1 style={{ color: 'black' }}>404! Page Not Found</h1>;
 
