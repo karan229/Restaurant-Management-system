@@ -161,7 +161,7 @@ const ConditionalNavBar = ({ onLogout, userType }) => {
       {showTopNavBar &&<TopNavBar onLogout={onLogout} />}
       {showNavBar && <NavBar onLogout={onLogout} />}
       {showRestoNavbar && <RestoNavbar />}
-      {showOnlineNav && userType === 'customer' && <OrderOnlineNavbar/>}
+      {showOnlineNav && userType === 'customer' && <OrderOnlineNavbar onLogout={onLogout}/>}
     </>
   );
 };
