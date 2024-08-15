@@ -1602,3 +1602,19 @@ td {
     box-sizing: border-box;
   }
 }
+
+/* Check out Responsive Styles */
+@media screen and (max-width: 768px) {
+
+  .content-list { 
+    width: 100vw;
+    gap: 0;
+  }
+
+  .checkout-list {
+    width: 80vw;
+  }
+  .checkout-container {
+    width: 80vw;
+  }
+}
