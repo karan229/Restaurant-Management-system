@@ -12,7 +12,7 @@ const AdminInventoryPage = () => {
   useEffect(() => {
     const fetchDishes = async () => {
       try {
-        const response = await fetch('http://localhost:8000/api/dish');
+        const response = await fetch('https://restaurant-management-system-jpbc.onrender.com/api/dish');
         const data = await response.json();
         console.log('Dishes fetched:', data);
         setDishes(data);
@@ -26,7 +26,7 @@ const AdminInventoryPage = () => {
 
   const fetchCategories = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/menu');
+      const response = await fetch('https://restaurant-management-system-jpbc.onrender.com/api/menu');
       const data = await response.json();
       if (Array.isArray(data)) {
         setCategories(data);
@@ -49,7 +49,7 @@ const AdminInventoryPage = () => {
     }
 
     try {
-      const response = await fetch('http://localhost:8000/api/category', {
+      const response = await fetch('https://restaurant-management-system-jpbc.onrender.com/api/category', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -78,7 +78,7 @@ const AdminInventoryPage = () => {
     if (newDishImage) formData.append('image', newDishImage);
 
     try {
-      const response = await fetch('http://localhost:8000/api/dish', {
+      const response = await fetch('https://restaurant-management-system-jpbc.onrender.com/api/dish', {
         method: 'POST',
         body: formData,
       });
@@ -100,7 +100,7 @@ const AdminInventoryPage = () => {
 
   const handleDeleteDish = async (dishId) => {
     try {
-      await fetch(`http://localhost:8000/api/dish/${dishId}`, {
+      await fetch(`https://restaurant-management-system-jpbc.onrender.com/api/dish/${dishId}`, {
         method: 'DELETE',
       });
       const updatedCategories = categories.map(category =>
@@ -116,7 +116,7 @@ const AdminInventoryPage = () => {
 
   const handleDeleteCategory = async (categoryId) => {
     try {
-      const response = await fetch(`http://localhost:8000/api/category/${categoryId}`, {
+      const response = await fetch(`https://restaurant-management-system-jpbc.onrender.com/api/category/${categoryId}`, {
         method: 'DELETE',
       });
       if (!response.ok) {
@@ -191,7 +191,7 @@ const AdminInventoryPage = () => {
                 {selectedCategoryData.dishes.map(dish => (
                   <li key={dish._id}>
                     {dish.name} - ${dish.price}
-                    {dish.image && <img src={`http://localhost:8000${dish.image}`} alt={dish.name} width="100" />} {/* Display image */}
+                    {dish.image && <img src={`https://restaurant-management-system-jpbc.onrender.com${dish.image}`} alt={dish.name} width="100" />} {/* Display image */}
                     <button onClick={() => handleDeleteDish(dish._id)}>Delete</button>
                   </li>
                 ))}
