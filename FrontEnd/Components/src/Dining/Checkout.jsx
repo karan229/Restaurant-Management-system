@@ -49,7 +49,7 @@
       console.log('Customization details:', customization);
       
       try {
-        const response = await fetch('http://localhost:8000/api/send-bill', {
+        const response = await fetch('https://restaurant-management-system-jpbc.onrender.com/api/send-bill', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
