@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "compile": "webpack --mode development",
     "watch": "webpack -w --config Webpack.config.js",
-    "start": "nodemon index.js"
+    "start": "nodemon index.js",
+    "build": "webpack --mode production"
   },
   "proxy": "https://restaurant-management-system-jpbc.onrender.com",
   "author": "",
