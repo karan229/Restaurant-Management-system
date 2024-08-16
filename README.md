@@ -52,6 +52,9 @@ Password: password2
 Admin 3:
 Email: admin3@example.com
 Password: password3
+Admin 4:
+Email: karan22@gmail.com
+Password: karan2200
 User Login
 Users can log in using one of the following methods:
 
